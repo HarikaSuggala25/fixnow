@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Nearby Services - FixNow</title>
+  <meta name="description" content="Discover verified local service providers near you using GPS, category filters, and community reviews.">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Leaflet.js Map CSS & Library -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo-wrapper" aria-label="FixNow Home">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-9.9 9.9a1 1 0 0 1-1.4 0l-1.6-1.6a1 1 0 0 1 0-1.4l9.9-9.9 1.4 0z"></path>
+            <path d="M19 3a3 3 0 0 0-3 3v.5"></path>
+          </svg>
+        </div>
+        <div class="logo-text">Fix<span>Now</span></div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="services.html" class="nav-link active">Find Services</a></li>
+          <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="household.html" class="nav-link">Household Health</a></li>
+          <li><a href="voice.html" class="nav-link">Voice Assistant</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="voice.html" class="btn btn-voice btn-sm">
+          <span>🎙️</span> Voice Search
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-links">
+        <li><a href="index.html" class="mobile-link"><span>🏠</span> Home</a></li>
+        <li><a href="services.html" class="mobile-link"><span>🔍</span> Find Services</a></li>
+        <li><a href="index.html#how-it-works" class="mobile-link"><span>⚙️</span> How It Works</a></li>
+        <li><a href="household.html" class="mobile-link"><span>🏡</span> Household Health</a></li>
+        <li><a href="voice.html" class="mobile-link"><span>🎙️</span> Voice Assistant</a></li>
+      </ul>
+      <div class="mobile-actions">
+        <a href="voice.html" class="btn btn-voice" style="width: 100%;">Use Voice Assistant</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Breadcrumb & Header -->
+  <section style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border-color); padding: 24px 0;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h1 style="font-size: 1.85rem; margin-bottom: 4px;">Find Local Services</h1>
+          <p style="color: var(--text-muted); font-size: 0.98rem;">
+            Real-time GPS proximity search for verified village and ward technicians.
+          </p>
+        </div>
+        <div id="providerCountBadge" class="badge badge-verified" style="font-size: 0.95rem; padding: 8px 16px;">
+          12 providers found
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="section" style="padding-top: 28px;">
+    <div class="container">
+
+      <!-- Search & Filters Control Bar -->
+      <section class="search-control-bar">
+        <div class="search-inputs-grid">
+          <!-- 1. Search Keyword -->
+          <div class="form-group">
+            <label class="form-label" for="searchKeyword">Search Name or Problem</label>
+            <div class="input-with-icon">
+              <span class="input-icon">🔍</span>
+              <input type="text" id="searchKeyword" class="form-control" placeholder="e.g. AC cooling, Ramayya, wiring...">
+            </div>
+          </div>
+
+          <!-- 2. Location & GPS -->
+          <div class="form-group">
+            <label class="form-label" for="searchLocation">Location / Area</label>
+            <div class="input-with-icon">
+              <span class="input-icon">📍</span>
+              <input type="text" id="searchLocation" class="form-control" placeholder="Rampur, Station Road...">
+            </div>
+          </div>
+
+          <!-- 3. Search Radius Filter -->
+          <div class="form-group">
+            <label class="form-label" for="filterRadius">Radius (Coverage)</label>
+            <select id="filterRadius" class="form-select">
+              <option value="all">Any Distance (All)</option>
+              <option value="5">Within 5 km</option>
+              <option value="10">Within 10 km</option>
+              <option value="20">Within 20 km</option>
+            </select>
+          </div>
+
+          <!-- 4. Sort By -->
+          <div class="form-group">
+            <label class="form-label" for="sortBy">Sort By</label>
+            <select id="sortBy" class="form-select">
+              <option value="distance">Distance (Nearest)</option>
+              <option value="rating">Rating (Highest)</option>
+              <option value="experience">Experience (Years)</option>
+            </select>
+          </div>
+
+          <!-- 5. GPS Auto-detect Button -->
+          <div class="form-group" style="justify-content: flex-end;">
+            <button id="btnDetectGps" class="btn btn-primary" title="Detect your current GPS location" style="height: 48px;">
+              <span>🎯</span> Use My GPS
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Dropdown + Category Tag Chips -->
+        <div style="margin-top: 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <div style="min-width: 220px;">
+            <label class="form-label" for="filterCategory" style="margin-bottom: 4px;">Service Category</label>
+            <select id="filterCategory" class="form-select">
+              <option value="all">All Service Categories</option>
+              <option value="beautician">Beautician / Salon</option>
+              <option value="ac-repair">AC Repair</option>
+              <option value="plumber">Plumber</option>
+              <option value="electrician">Electrician</option>
+              <option value="mechanic">Mechanic</option>
+              <option value="refrigerator">Refrigerator Repair</option>
+              <option value="washing-machine">Washing Machine</option>
+              <option value="tv-repair">TV Repair</option>
+              <option value="ro-water">RO / Water Purifier</option>
+              <option value="carpenter">Carpenter</option>
+              <option value="painter">Painter</option>
+              <option value="labourer">Labourer</option>
+            </select>
+          </div>
+
+          <div style="flex: 1;">
+            <div class="filter-tags-row" style="margin-top: 0; padding-top: 0; border-top: none;">
+              <span class="filter-tag-pill active" data-category="all">All</span>
+              <span class="filter-tag-pill" data-category="beautician">✂️ Beautician</span>
+              <span class="filter-tag-pill" data-category="ac-repair">❄️ AC Repair</span>
+              <span class="filter-tag-pill" data-category="plumber">🚰 Plumber</span>
+              <span class="filter-tag-pill" data-category="electrician">⚡ Electrician</span>
+              <span class="filter-tag-pill" data-category="mechanic">🔧 Mechanic</span>
+              <span class="filter-tag-pill" data-category="refrigerator">🧊 Refrigerator</span>
+              <span class="filter-tag-pill" data-category="washing-machine">🧺 Washing Machine</span>
+              <span class="filter-tag-pill" data-category="ro-water">💧 RO Filter</span>
+              <span class="filter-tag-pill" data-category="painter">🎨 Painter</span>
+              <span class="filter-tag-pill" data-category="carpenter">🪚 Carpenter</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services Split Layout: Providers List & Interactive Map -->
+      <div class="services-layout-grid">
+        <!-- Left: Provider Cards List -->
+        <div>
+          <div class="providers-list" id="providersContainer">
+            <!-- Dynamically populated by js/services.js -->
+          </div>
+        </div>
+
+        <!-- Right: Interactive Leaflet OpenStreetMap -->
+        <aside>
+          <div class="map-container-wrap">
+            <div class="map-header">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="radar-pulse-dot"></span>
+                <strong style="color: var(--secondary); font-size: 0.95rem;">Live Proximity Map</strong>
+              </div>
+              <span style="font-size: 0.8rem; color: var(--text-light);">Leaflet &bull; OpenStreetMap</span>
+            </div>
+            <div id="servicesMap" role="region" aria-label="Interactive map showing nearby service providers"></div>
+            <div style="padding: 12px 16px; background-color: var(--bg-subtle); font-size: 0.82rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+              <span>📍 Blue Pin: Your Location</span>
+              <span>🏷️ Dark Pins: Verified Providers</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Global Booking Modal -->
+  <div class="modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="bookingModalTitle">Book Service Provider</h3>
+        <button class="modal-close-btn" id="closeBookingModal" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <!-- Booking Form -->
+      <form id="serviceBookingForm">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProviderName">Selected Professional</label>
+          <input type="text" id="bookingProviderName" class="form-control" placeholder="Select a technician from Services" readonly style="background-color: var(--bg-subtle);">
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingServiceCategory">Main Service</label>
+            <select id="bookingServiceCategory" class="form-select">
+              <option value="Beautician">Beautician / Doorstep Salon</option>
+              <option value="AC Repair">AC Repair & Servicing</option>
+              <option value="Plumber">Plumbing & Pipe Repair</option>
+              <option value="Electrician">Electrician & Wiring</option>
+              <option value="Mechanic">Bike / Auto Mechanic</option>
+              <option value="Refrigerator">Refrigerator Repair</option>
+              <option value="Washing Machine">Washing Machine</option>
+              <option value="RO Purifier">RO Water Purifier</option>
+              <option value="Painter">House Painting & Waterproofing</option>
+              <option value="Carpenter">Carpentry & Furniture</option>
+              <option value="General Service">Other Home Service</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingSubService">Sub-Service / Specific Job</label>
+            <select id="bookingSubService" class="form-select">
+              <option value="Hair Wash">Hair Wash</option>
+              <option value="Herbal Glow Facial">Herbal Glow Facial</option>
+              <option value="Haircut & Deep Conditioning">Haircut & Deep Conditioning</option>
+              <option value="Bridal Mehendi & Makeup">Bridal Mehendi & Makeup</option>
+              <option value="Threading & Organic Waxing">Threading & Organic Waxing</option>
+              <option value="General Inspection">General Inspection / Repair</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingDate">Preferred Date</label>
+            <input type="date" id="bookingDate" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingTimeSlot">Preferred Time Slot</label>
+            <select id="bookingTimeSlot" class="form-select">
+              <option value="Morning (9:00 AM - 12:00 PM)">Morning (9:00 AM - 12:00 PM)</option>
+              <option value="Afternoon (12:00 PM - 4:00 PM)">Afternoon (12:00 PM - 4:00 PM)</option>
+              <option value="Evening (4:00 PM - 8:00 PM)">Evening (4:00 PM - 8:00 PM)</option>
+              <option value="Urgent (As soon as possible)">🚨 Urgent (As soon as possible)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProblemDesc">Describe the Problem</label>
+          <textarea id="bookingProblemDesc" class="form-control" rows="2" placeholder="e.g., AC not cooling, strange rattling noise..." style="height: auto; padding-top: 10px;"></textarea>
+          <div class="quick-problem-chips">
+            <span class="chip-select">Not cooling</span>
+            <span class="chip-select">Water leakage</span>
+            <span class="chip-select">Strange noise</span>
+            <span class="chip-select">Power trip / Fuse</span>
+            <span class="chip-select">Routine cleaning</span>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerName">Your Name</label>
+            <input type="text" id="bookingCustomerName" class="form-control" placeholder="Enter your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerPhone">Mobile Phone Number</label>
+            <input type="tel" id="bookingCustomerPhone" class="form-control" placeholder="10-digit mobile number" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingAddress">Village / Street / House Landmark</label>
+          <input type="text" id="bookingAddress" class="form-control" placeholder="e.g., Near Gram Panchayat, Rampur" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label" for="bookingImageUpload">Optional Photo of the Appliance / Issue</label>
+          <input type="file" id="bookingImageUpload" accept="image/*" class="form-control" style="padding-top: 8px;">
+          <div id="bookingImagePreview"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+          Confirm Service Request
+        </button>
+      </form>
+
+      <!-- Booking Success State -->
+      <div id="bookingSuccessState" class="booking-success-box">
+        <div class="success-icon-circle">✓</div>
+        <h3 style="color: var(--secondary); margin-bottom: 6px;">Service request sent successfully.</h3>
+        <p style="color: var(--text-muted); margin-bottom: 18px;">
+          Your request has been dispatched to the local service professional.
+        </p>
+
+        <div id="successDetails" style="text-align: left; background: var(--bg-subtle); padding: 18px; border-radius: var(--radius-md); margin-bottom: 24px; font-size: 0.95rem; line-height: 1.7;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button class="btn btn-secondary btn-sm" onclick="window.FixNowServices.resetFilters(); window.FixNow.closeBookingModal();">Find More Services</button>
+          <button class="btn btn-primary btn-sm" onclick="window.FixNow.closeBookingModal()">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+            <div style="width: 32px; height: 32px; background: #2563eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">FN</div>
+            <h3 style="margin: 0;">FixNow</h3>
+          </div>
+          <p>"Smart local help, made simple."</p>
+          <p style="font-size: 0.88rem; margin-top: 8px;">
+            AI-powered GPS local service finder with multilingual voice assistance for rural and low-literacy users.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Find Services</a></li>
+            <li><a href="household.html">Household Health</a></li>
+            <li><a href="voice.html">Voice Assistant</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Filter by Category</h4>
+          <ul class="footer-links">
+            <li><a href="services.html?category=ac-repair">AC Repair Specialist</a></li>
+            <li><a href="services.html?category=plumber">Master Plumber</a></li>
+            <li><a href="services.html?category=electrician">Senior Electrician</a></li>
+            <li><a href="services.html?category=mechanic">Bike & Auto Mechanic</a></li>
+            <li><a href="services.html?category=ro-water">RO Water Purifier</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Voice Search</h4>
+          <ul class="footer-links">
+            <li><a href="voice.html">English Voice</a></li>
+            <li><a href="voice.html">తెలుగు వాయిస్ అసిస్టెంట్</a></li>
+            <li><a href="voice.html">தமிழ் குரல் உதவி</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 FixNow. All rights reserved.</div>
+        <div class="footer-prototype-note">
+          College Project Frontend Prototype &bull; Backend ready for FastAPI, MongoDB Atlas & Scikit-learn
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/services.js"></script>
+</body>
+</html>

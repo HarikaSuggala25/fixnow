@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f7f1">
+    <meta name="description" content="FixNow local service user requirement survey">
+    <title>FixNow - Local Service User Requirement Survey</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="#survey" aria-label="FixNow survey home">
+          <span class="brand-mark" aria-hidden="true">F</span><span>FixNow</span>
+        </a>
+        <label class="language-control" for="language-select">
+          <span class="language-label" data-i18n="languageLabel">Language</span>
+          <select id="language-select" name="language" aria-label="Language">
+            <option value="en">English</option>
+            <option value="te">తెలుగు</option>
+            <option value="ta">தமிழ்</option>
+          </select>
+        </label>
+      </header>
+
+      <section class="intro" aria-labelledby="survey-title">
+        <p class="eyebrow" data-i18n="eyebrow">A community listening project</p>
+        <h1 id="survey-title">FixNow - Local Service User Requirement Survey</h1>
+        <p id="survey-description" class="intro-copy"></p>
+      </section>
+
+      <section id="survey-panel" class="survey-panel" aria-label="Survey">
+        <div class="progress-heading">
+          <p id="progress-text" class="progress-text" aria-live="polite"></p>
+          <span id="progress-percent" class="progress-percent"></span>
+        </div>
+        <div id="progress-track" class="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="10" aria-valuenow="1">
+          <span id="progress-fill" class="progress-fill"></span>
+        </div>
+        <form id="survey-form" novalidate>
+          <div id="question-content" class="question-content"></div>
+          <p id="validation-message" class="validation-message" role="alert" aria-live="assertive"></p>
+          <div class="form-navigation">
+            <button id="previous-button" class="button button-quiet" type="button"></button>
+            <button id="next-button" class="button button-primary" type="button"></button>
+            <button id="submit-button" class="button button-primary" type="submit" hidden></button>
+          </div>
+        </form>
+      </section>
+
+      <section id="success-panel" class="success-panel" aria-live="polite" hidden>
+        <span class="success-mark" aria-hidden="true">✓</span>
+        <h2 id="success-title"></h2>
+        <p id="success-copy"></p>
+      </section>
+
+      <footer class="page-footer">
+        <span class="footer-rule" aria-hidden="true"></span>
+        <p data-i18n="footer">FixNow · Local help, made easier to find.</p>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Provider Profile - FixNow</title>
+  <meta name="description" content="View verified local technician profile, service pricing, customer photos, videos, and book doorstep service on FixNow.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo-wrapper" aria-label="FixNow Home">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-9.9 9.9a1 1 0 0 1-1.4 0l-1.6-1.6a1 1 0 0 1 0-1.4l9.9-9.9 1.4 0z"></path>
+            <path d="M19 3a3 3 0 0 0-3 3v.5"></path>
+          </svg>
+        </div>
+        <div class="logo-text">Fix<span>Now</span></div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="services.html" class="nav-link active">Find Services</a></li>
+          <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="household.html" class="nav-link">Household Health</a></li>
+          <li><a href="voice.html" class="nav-link">Voice Assistant</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="services.html" class="btn btn-secondary btn-sm">&larr; Back to Services</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-links">
+        <li><a href="index.html" class="mobile-link"><span>🏠</span> Home</a></li>
+        <li><a href="services.html" class="mobile-link"><span>🔍</span> Find Services</a></li>
+        <li><a href="index.html#how-it-works" class="mobile-link"><span>⚙️</span> How It Works</a></li>
+        <li><a href="household.html" class="mobile-link"><span>🏡</span> Household Health</a></li>
+        <li><a href="voice.html" class="mobile-link"><span>🎙️</span> Voice Assistant</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Provider Profile Hero -->
+  <section class="provider-profile-hero">
+    <div class="container">
+      <div class="profile-header-grid" id="profileHeader">
+        <!-- Avatar Box -->
+        <div style="position: relative;">
+          <img id="providerAvatar" src="https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=300&h=300&fit=crop&crop=faces" alt="Provider Photo" class="profile-avatar-lg">
+          <div style="position: absolute; bottom: 8px; right: 8px; background: #15803d; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; font-weight: bold; font-size: 1rem;">
+            ✓
+          </div>
+        </div>
+
+        <!-- Provider Meta Info -->
+        <div>
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px;">
+            <h1 id="providerName" style="font-size: 2.2rem; margin: 0;">Service Professional</h1>
+            <span class="badge badge-verified">✓ Verified Specialist</span>
+            <span class="badge badge-status-good" id="providerAvailability">● Available</span>
+          </div>
+
+          <p id="providerTitle" style="color: var(--primary); font-size: 1.2rem; font-weight: 700; margin-bottom: 12px;">
+            Service Specialist
+          </p>
+
+          <div class="provider-meta-row" style="font-size: 1rem;">
+            <div class="meta-item">
+              <span class="rating-stars" id="providerRating">★ 5.0</span>
+              <span id="providerReviewCount" style="color: var(--text-light);">(0 customer reviews)</span>
+            </div>
+            <div class="meta-item">
+              <span>📍</span>
+              <span id="providerLocation">Location on Map</span>
+            </div>
+            <div class="meta-item">
+              <span>💼</span>
+              <span id="providerExperience">Verified experience</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;" id="providerLanguages">
+            <span class="badge" style="background: var(--bg-subtle); color: var(--text-muted);">🗣️ English</span>
+            <span class="badge" style="background: var(--bg-subtle); color: var(--text-muted);">🗣️ Local Language</span>
+          </div>
+        </div>
+
+        <!-- Quick CTAs -->
+        <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 260px;">
+          <button id="btnProfileBookTop" class="btn btn-primary btn-lg" style="width: 100%;">
+            Book Service Now
+          </button>
+          <button id="btnProfileChatTop" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+            💬 Chat with Provider
+          </button>
+          <a id="btnProfileCallTop" class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 0.9rem;">
+            📞 Call Provider
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profile Details Section -->
+  <main class="section">
+    <div class="container">
+      <div class="profile-details-grid">
+        
+        <!-- Left Column: Bio, Services, Media Gallery, Reviews -->
+        <div>
+          <!-- About Provider -->
+          <div class="profile-card-block">
+            <h3><span>👨‍🔧</span> About the Specialist</h3>
+            <p id="providerAbout" style="font-size: 1.05rem; line-height: 1.65; color: var(--text-main);">
+              Verified professional service provider on FixNow. Dedicated to high-quality workmanship, transparent pricing, and timely doorstep service.
+            </p>
+          </div>
+
+          <!-- Services Offered & Pricing -->
+          <div class="profile-card-block">
+            <h3><span>📋</span> Services Offered & Transparent Estimates</h3>
+            <div class="services-offered-list" id="servicesOfferedList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Customer Uploaded Photos & Videos -->
+          <div class="profile-card-block">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h3 style="margin-bottom: 0; padding-bottom: 0; border-bottom: none;">
+                <span>📸</span> Work Evidence & Customer Media
+              </h3>
+              <span class="badge badge-category">Job Proof</span>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 16px;">
+              Recent photos and videos uploaded by local customers after service completion.
+            </p>
+
+            <div class="media-gallery-grid" id="customerMediaGallery">
+              <!-- Sample Media Cards -->
+              <div class="gallery-item" onclick="window.FixNow.showToast('Viewing full resolution photo', 'info')">
+                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=500&auto=format&fit=crop" alt="Indoor AC Jet Wash">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 6px 10px; font-size: 0.78rem;">
+                  Coil Jet Cleaning
+                </div>
+              </div>
+
+              <div class="gallery-item" onclick="window.FixNow.showToast('Viewing compressor pressure test photo', 'info')">
+                <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&auto=format&fit=crop" alt="Compressor Pressure Test">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 6px 10px; font-size: 0.78rem;">
+                  Compressor Test
+                </div>
+              </div>
+
+              <div class="gallery-item" onclick="window.FixNow.showToast('Playing customer video test...', 'info')">
+                <img src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=500&auto=format&fit=crop" alt="Customer Video Testimonial">
+                <div class="video-badge-overlay">
+                  ▶ Video (0:45)
+                </div>
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 6px 10px; font-size: 0.78rem;">
+                  Sound Check Video
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer Reviews & Testimonials -->
+          <div class="profile-card-block">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 style="margin-bottom: 0; padding-bottom: 0; border-bottom: none;">
+                <span>⭐</span> Customer Reviews & Ratings
+              </h3>
+              <button class="btn btn-secondary btn-sm" onclick="document.getElementById('writeReviewSection').scrollIntoView({behavior: 'smooth'})">
+                Write a Review
+              </button>
+            </div>
+
+            <div class="reviews-list" id="customerReviewsList">
+              <!-- Dynamically populated -->
+            </div>
+
+            <!-- Write a Review Form -->
+            <div id="writeReviewSection" style="margin-top: 32px; padding-top: 24px; border-top: 1px dashed var(--border-color);">
+              <h4 style="margin-bottom: 12px; color: var(--secondary);">Leave a Review for this Provider</h4>
+              <form id="submitReviewForm">
+                <div class="form-grid-2" style="margin-bottom: 12px;">
+                  <div class="form-group">
+                    <label class="form-label" for="reviewAuthor">Your Name</label>
+                    <input type="text" id="reviewAuthor" class="form-control" placeholder="e.g. S. Mallesh" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="reviewRating">Rating</label>
+                    <select id="reviewRating" class="form-select">
+                      <option value="5">★★★★★ (5 - Excellent)</option>
+                      <option value="4">★★★★☆ (4 - Good)</option>
+                      <option value="3">★★★☆☆ (3 - Average)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 14px;">
+                  <label class="form-label" for="reviewComment">Your Feedback</label>
+                  <textarea id="reviewComment" class="form-control" rows="3" placeholder="Explain the service done, technician punctuality, and price fairness..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-sm">Submit Review</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Instant Booking Card & Verification Checklist -->
+        <div>
+          <!-- Sticky Booking Card -->
+          <div class="profile-card-block" style="position: sticky; top: 96px; border-top: 4px solid var(--primary);">
+            <h3 style="margin-bottom: 16px;"><span>⚡</span> Direct Doorstep Booking</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 20px;">
+              No advance payment required. The specialist will call you to confirm your address and timing.
+            </p>
+
+            <div style="background-color: var(--bg-subtle); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem;">
+                <span style="color: var(--text-muted);">Inspection / Visiting Fee:</span>
+                <strong style="color: var(--secondary);">₹150</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.95rem;">
+                <span style="color: var(--text-muted);">Adjusted against bill:</span>
+                <strong style="color: #15803d;">Yes (Free with repair)</strong>
+              </div>
+            </div>
+
+            <button id="btnProfileBookSidebar" class="btn btn-primary btn-lg" style="width: 100%; margin-bottom: 10px;">
+              Book Service Specialist
+            </button>
+            <button id="btnProfileChatSidebar" class="btn btn-secondary" style="width: 100%; justify-content: center; margin-bottom: 10px;">
+              💬 Chat with Provider
+            </button>
+            <div id="sidebarCallWrap" style="margin-bottom: 12px;">
+              <a id="btnProfileCallSidebar" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                📞 Call Provider
+              </a>
+            </div>
+
+            <!-- Verification & Safety Badge Card -->
+            <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-color);">
+              <h4 style="font-size: 0.95rem; margin-bottom: 10px; color: var(--secondary);">FixNow Safety Checklist:</h4>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-muted);">
+                <li style="display: flex; align-items: center; gap: 8px;">
+                  <span style="color: #15803d; font-weight: bold;">✓</span> Government Aadhaar / ID Verified
+                </li>
+                <li style="display: flex; align-items: center; gap: 8px;">
+                  <span style="color: #15803d; font-weight: bold;">✓</span> 5+ Years Local Track Record
+                </li>
+                <li style="display: flex; align-items: center; gap: 8px;">
+                  <span style="color: #15803d; font-weight: bold;">✓</span> Standard Transparent Rate Card
+                </li>
+                <li style="display: flex; align-items: center; gap: 8px;">
+                  <span style="color: #15803d; font-weight: bold;">✓</span> Customer Satisfaction Guaranteed
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Global Booking Modal -->
+  <div class="modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="bookingModalTitle">Book Service Provider</h3>
+        <button class="modal-close-btn" id="closeBookingModal" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <!-- Booking Form -->
+      <form id="serviceBookingForm">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProviderName">Selected Professional</label>
+          <input type="text" id="bookingProviderName" class="form-control" value="Service Specialist" readonly style="background-color: var(--bg-subtle);">
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingServiceCategory">Main Service</label>
+            <select id="bookingServiceCategory" class="form-select">
+              <option value="Beautician">Beautician / Doorstep Salon</option>
+              <option value="AC Repair">AC Repair & Servicing</option>
+              <option value="Plumber">Plumbing & Pipe Repair</option>
+              <option value="Electrician">Electrician & Wiring</option>
+              <option value="Mechanic">Bike / Auto Mechanic</option>
+              <option value="Refrigerator">Refrigerator Repair</option>
+              <option value="Washing Machine">Washing Machine</option>
+              <option value="RO Purifier">RO Water Purifier</option>
+              <option value="Painter">House Painting & Waterproofing</option>
+              <option value="Carpenter">Carpentry & Furniture</option>
+              <option value="General Service">Other Home Service</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingSubService">Sub-Service / Specific Job</label>
+            <select id="bookingSubService" class="form-select">
+              <option value="General Inspection">General Inspection / Repair</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingDate">Preferred Date</label>
+            <input type="date" id="bookingDate" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingTimeSlot">Preferred Time Slot</label>
+            <select id="bookingTimeSlot" class="form-select">
+              <option value="Morning (9:00 AM - 12:00 PM)">Morning (9:00 AM - 12:00 PM)</option>
+              <option value="Afternoon (12:00 PM - 4:00 PM)">Afternoon (12:00 PM - 4:00 PM)</option>
+              <option value="Evening (4:00 PM - 8:00 PM)">Evening (4:00 PM - 8:00 PM)</option>
+              <option value="Urgent (As soon as possible)">🚨 Urgent (As soon as possible)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProblemDesc">Describe the Problem</label>
+          <textarea id="bookingProblemDesc" class="form-control" rows="2" placeholder="e.g., AC not cooling, strange rattling noise..." style="height: auto; padding-top: 10px;"></textarea>
+          <div class="quick-problem-chips">
+            <span class="chip-select">Not cooling</span>
+            <span class="chip-select">Water leakage</span>
+            <span class="chip-select">Strange noise</span>
+            <span class="chip-select">Power trip / Fuse</span>
+            <span class="chip-select">Routine cleaning</span>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerName">Your Name</label>
+            <input type="text" id="bookingCustomerName" class="form-control" placeholder="Enter your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerPhone">Mobile Phone Number</label>
+            <input type="tel" id="bookingCustomerPhone" class="form-control" placeholder="10-digit mobile number" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingAddress">Village / Street / House Landmark</label>
+          <input type="text" id="bookingAddress" class="form-control" placeholder="e.g., Near Gram Panchayat, Rampur" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label" for="bookingImageUpload">Optional Photo of the Appliance / Issue</label>
+          <input type="file" id="bookingImageUpload" accept="image/*" class="form-control" style="padding-top: 8px;">
+          <div id="bookingImagePreview"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+          Confirm Service Request
+        </button>
+      </form>
+
+      <!-- Booking Success State -->
+      <div id="bookingSuccessState" class="booking-success-box">
+        <div class="success-icon-circle">✓</div>
+        <h3 style="color: var(--secondary); margin-bottom: 6px;">Service request sent successfully.</h3>
+        <p style="color: var(--text-muted); margin-bottom: 18px;">
+          Your request has been dispatched to the local service professional.
+        </p>
+
+        <div id="successDetails" style="text-align: left; background: var(--bg-subtle); padding: 18px; border-radius: var(--radius-md); margin-bottom: 24px; font-size: 0.95rem; line-height: 1.7;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <a href="services.html" class="btn btn-secondary btn-sm">Find More Services</a>
+          <button class="btn btn-primary btn-sm" onclick="window.FixNow.closeBookingModal()">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+            <div style="width: 32px; height: 32px; background: #2563eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">FN</div>
+            <h3 style="margin: 0;">FixNow</h3>
+          </div>
+          <p>"Smart local help, made simple."</p>
+          <p style="font-size: 0.88rem; margin-top: 8px;">
+            AI-powered GPS local service finder with multilingual voice assistance for rural and low-literacy users.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Find Services</a></li>
+            <li><a href="household.html">Household Health</a></li>
+            <li><a href="voice.html">Voice Assistant</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Need Urgent Help?</h4>
+          <ul class="footer-links">
+            <li><a href="voice.html">Use Voice Search</a></li>
+            <li><a href="services.html?category=electrician">Emergency Electrician</a></li>
+            <li><a href="services.html?category=plumber">Emergency Plumber</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>FixNow Quality</h4>
+          <ul class="footer-links">
+            <li><a href="#!">Identity Verification</a></li>
+            <li><a href="#!">Customer Protection</a></li>
+            <li><a href="#!">Fair Pricing Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 FixNow. All rights reserved.</div>
+        <div class="footer-prototype-note">
+          College Project Frontend Prototype &bull; Backend ready for FastAPI, MongoDB Atlas & Scikit-learn
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Provider Profile Dynamic Loader
+    document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const rawId = urlParams.get('id');
+      const providers = (window.FixNowData && typeof window.FixNowData.getEffectiveProviders === 'function')
+        ? window.FixNowData.getEffectiveProviders()
+        : (window.FixNowData ? window.FixNowData.providers : []);
+      const provider = rawId ? providers.find(p => String(p.id) === String(rawId)) : (providers.length > 0 ? providers[0] : null);
+
+      if (!provider) {
+        const hero = document.querySelector('.provider-profile-hero');
+        const details = document.querySelector('.profile-details-grid');
+        if (hero) {
+          hero.innerHTML = `
+            <div class="container" style="text-align: center; padding: 60px 20px;">
+              <div style="font-size: 3.5rem; margin-bottom: 12px;">👤</div>
+              <h2 style="font-size: 1.8rem; margin-bottom: 8px;">No Service Provider Selected</h2>
+              <p style="color: var(--text-muted); max-width: 540px; margin: 0 auto 24px; font-size: 1.05rem;">
+                There is currently no service provider with this profile ID. You can find active local technicians in the Services Directory or register as a provider.
+              </p>
+              <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <a href="services.html" class="btn btn-primary"><span>🔍</span> Explore Services</a>
+                <a href="auth.html?role=provider" class="btn btn-secondary"><span>🔧</span> Register as Provider</a>
+              </div>
+            </div>
+          `;
+        }
+        if (details) details.style.display = 'none';
+        return;
+      }
+
+      // Populate hero elements
+      document.title = `${provider.name} - ${provider.serviceTitle || 'Specialist'} | FixNow`;
+      document.getElementById('providerName').textContent = provider.name || 'Not provided';
+      document.getElementById('providerTitle').textContent = provider.serviceTitle || 'Service Specialist';
+      if (provider.avatar || provider.image) {
+        document.getElementById('providerAvatar').src = provider.avatar || provider.image;
+      }
+      document.getElementById('providerRating').textContent = provider.rating ? `★ ${provider.rating}` : '★ 5.0';
+      document.getElementById('providerReviewCount').textContent = `(${provider.reviewsCount || provider.reviewCount || 0} customer reviews)`;
+      document.getElementById('providerLocation').textContent = provider.locationName ? `${provider.locationName} (${provider.distanceKm || 2} km away)` : 'Not provided';
+      document.getElementById('providerExperience').textContent = (provider.experienceYears || provider.experience) ? `${provider.experienceYears || provider.experience} years field experience` : 'Not provided';
+      document.getElementById('providerAvailability').textContent = `● ${provider.availability || 'Available Today'}`;
+      document.getElementById('providerAbout').textContent = provider.about || provider.description || 'Not provided';
+
+      // Languages
+      const langWrap = document.getElementById('providerLanguages');
+      if (langWrap) {
+        if (provider.languages && provider.languages.length > 0) {
+          langWrap.innerHTML = provider.languages.map(l => `<span class="badge" style="background: var(--bg-subtle); color: var(--text-muted);">🗣️ ${l}</span>`).join('');
+        } else {
+          langWrap.innerHTML = `<span class="badge" style="background: var(--bg-subtle); color: var(--text-muted);">Not provided</span>`;
+        }
+      }
+
+      // 📞 Call Provider handler (Requirement 19 & 26)
+      const rawPhone = provider.phoneNumber || provider.phone;
+      const callTop = document.getElementById('btnProfileCallTop');
+      const callSidebar = document.getElementById('btnProfileCallSidebar');
+
+      if (rawPhone && rawPhone.trim()) {
+        const cleanPhone = rawPhone.replace(/[^0-9+]/g, '');
+        if (callTop) {
+          callTop.href = `tel:${cleanPhone}`;
+          callTop.innerHTML = `📞 Call Provider (${rawPhone})`;
+        }
+        if (callSidebar) {
+          callSidebar.href = `tel:${cleanPhone}`;
+          callSidebar.innerHTML = `📞 Call Provider`;
+        }
+      } else {
+        if (callTop) {
+          callTop.removeAttribute('href');
+          callTop.style.pointerEvents = 'none';
+          callTop.style.opacity = '0.65';
+          callTop.innerHTML = `📞 Phone number not available.`;
+        }
+        if (callSidebar) {
+          callSidebar.removeAttribute('href');
+          callSidebar.style.pointerEvents = 'none';
+          callSidebar.style.opacity = '0.65';
+          callSidebar.innerHTML = `Phone number not available.`;
+        }
+      }
+
+      // 💬 Chat with Provider handler (Requirement 20 & 26)
+      const chatTop = document.getElementById('btnProfileChatTop');
+      const chatSidebar = document.getElementById('btnProfileChatSidebar');
+      const chatAction = () => {
+        if (window.FixNowChat && window.FixNowChat.openProviderProfileChat) {
+          window.FixNowChat.openProviderProfileChat(provider);
+        }
+      };
+      if (chatTop) chatTop.addEventListener('click', chatAction);
+      if (chatSidebar) chatSidebar.addEventListener('click', chatAction);
+
+      // Book buttons
+      const bookAction = () => window.FixNow.openBookingModal(provider);
+      document.getElementById('btnProfileBookTop').addEventListener('click', bookAction);
+      document.getElementById('btnProfileBookSidebar').addEventListener('click', bookAction);
+      document.getElementById('btnProfileBookSidebar').textContent = `Book ${provider.name.split(' ')[0]}`;
+
+      // Services offered list
+      const servicesListEl = document.getElementById('servicesOfferedList');
+      if (servicesListEl) {
+        if (provider.pricing && provider.pricing.length > 0) {
+          servicesListEl.innerHTML = provider.pricing.map(item => `
+            <div class="service-item-pill">
+              <span class="name">${item.service}</span>
+              <span class="price">${item.price}</span>
+            </div>
+          `).join('');
+        } else if (provider.services && provider.services.length > 0) {
+          servicesListEl.innerHTML = provider.services.map(s => `
+            <div class="service-item-pill">
+              <span class="name">${s}</span>
+              <span class="price">Standard Rate</span>
+            </div>
+          `).join('');
+        } else {
+          servicesListEl.innerHTML = `<span style="color: var(--text-muted); font-size: 0.9rem;">Not provided</span>`;
+        }
+      }
+
+      // Customer Reviews
+      const reviewsListEl = document.getElementById('customerReviewsList');
+      function renderReviews() {
+        if (!reviewsListEl) return;
+        reviewsListEl.innerHTML = provider.reviews.map(rev => `
+          <div class="review-item">
+            <div class="review-header">
+              <span class="reviewer-name">${rev.name}</span>
+              <span class="review-date">${rev.date}</span>
+            </div>
+            <div style="color: #f59e0b; font-size: 0.9rem; margin-bottom: 4px;">
+              ${'★'.repeat(Math.floor(rev.rating))} (${rev.rating})
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.45;">
+              ${rev.comment}
+            </p>
+          </div>
+        `).join('');
+      }
+      renderReviews();
+
+      // Submit Review form interaction
+      const reviewForm = document.getElementById('submitReviewForm');
+      if (reviewForm) {
+        reviewForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const author = document.getElementById('reviewAuthor').value.trim();
+          const rating = parseFloat(document.getElementById('reviewRating').value);
+          const comment = document.getElementById('reviewComment').value.trim();
+
+          if (!author || !comment) return;
+
+          provider.reviews.unshift({
+            name: author,
+            rating: rating,
+            date: 'Today',
+            comment: comment
+          });
+          provider.reviewsCount += 1;
+          document.getElementById('providerReviewCount').textContent = `(${provider.reviewsCount} customer reviews)`;
+
+          renderReviews();
+          reviewForm.reset();
+          window.FixNow.showToast('Thank you! Your review has been submitted.', 'success');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

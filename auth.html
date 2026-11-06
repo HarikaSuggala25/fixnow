@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Sign Up - FixNow</title>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Leaflet.js Map CSS & Library for Location Pinning -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo-wrapper" aria-label="FixNow Home">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-9.9 9.9a1 1 0 0 1-1.4 0l-1.6-1.6a1 1 0 0 1 0-1.4l9.9-9.9 1.4 0z"></path>
+            <path d="M19 3a3 3 0 0 0-3 3v.5"></path>
+          </svg>
+        </div>
+        <div class="logo-text">Fix<span>Now</span></div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="services.html" class="nav-link">Find Services</a></li>
+          <li><a href="household.html" class="nav-link">Household Health</a></li>
+          <li><a href="voice.html" class="nav-link">Voice Assistant</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary btn-sm">&larr; Back to Home</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Authentication Container -->
+  <main class="section" style="padding-top: 32px;">
+    
+    <!-- Multilingual Voice Assistant Guide for Login & Registration -->
+    <div class="container" style="max-width: 840px; margin-bottom: 28px;">
+      <div class="voice-auth-guide-box" style="background: white; border: 2px solid #93c5fd; border-radius: 16px; padding: 20px 24px; box-shadow: 0 4px 16px rgba(30, 64, 175, 0.08);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: #eff6ff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid #bfdbfe;">
+              🎙️
+            </div>
+            <div>
+              <h2 style="font-size: 1.2rem; margin: 0; color: #0f172a; font-weight: 700;">FixNow Multilingual Voice Guide</h2>
+              <p style="font-size: 0.86rem; color: #64748b; margin: 0;">Voice guidance for login and registration in your preferred language</p>
+            </div>
+          </div>
+
+          <!-- Language Selector -->
+          <div class="voice-auth-lang-selector" style="display: flex; gap: 6px;">
+            <button type="button" class="btn btn-sm btn-primary active-lang" id="btnAuthLangEn" onclick="window.FixNowAuthVoice.setLanguage('en')">English</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="btnAuthLangTe" onclick="window.FixNowAuthVoice.setLanguage('te')">తెలుగు</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="btnAuthLangHi" onclick="window.FixNowAuthVoice.setLanguage('hi')">हिंदी</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="btnAuthLangTa" onclick="window.FixNowAuthVoice.setLanguage('ta')">தமிழ்</button>
+          </div>
+        </div>
+
+        <!-- Assistant Spoken & Text Guidance Box -->
+        <div id="authVoiceGuideSpeechText" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; font-size: 0.96rem; line-height: 1.55; color: #1e293b;">
+          <strong>🎙️ Audio Guide:</strong> <span id="authVoiceSpeechContent">Welcome to FixNow. To log in, enter your registered email or mobile number and password, then click Login. If you do not have an account, click "New Customer Signup" or say "Register" to create an account.</span>
+        </div>
+
+        <!-- Speech-to-Text Live Transcript Row -->
+        <div id="authVoiceLiveTranscriptRow" style="display: none; background: #eff6ff; border: 1px dashed #93c5fd; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.9rem; color: #1e40af;">
+          👤 You said: "<span id="authVoiceLiveTranscript" style="font-weight: 600;">...</span>"
+        </div>
+
+        <!-- Control Action Buttons -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary btn-sm" id="btnPlayAuthVoice" onclick="window.FixNowAuthVoice.speakCurrentGuide()">
+              <span>🔊</span> Listen to Voice Guide
+            </button>
+            <button type="button" class="btn btn-voice btn-sm" id="btnMicAuthVoice" onclick="window.FixNowAuthVoice.toggleMic()">
+              <span>🎙️</span> Speak Voice Command
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnStopAuthVoice" onclick="window.FixNowAuthVoice.stopSpeaking()" style="display: none;">
+              <span>⏹️</span> Stop
+            </button>
+          </div>
+
+          <div style="font-size: 0.82rem; color: #64748b;">
+            💡 Spoken commands: <em>"Login"</em>, <em>"Register"</em>, <em>"Customer"</em>, <em>"తెలుగు"</em>, <em>"தமிழ்"</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 1: Role Selection Screen -->
+    <div class="role-selection-wrapper" id="roleSelectionView">
+      <div class="text-center">
+        <span class="badge badge-category" style="margin-bottom: 10px;">Welcome to FixNow</span>
+        <h1 style="font-size: 2.2rem; margin-bottom: 10px;">How would you like to use FixNow?</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 620px; margin: 0 auto;">
+          Select your account type to proceed to the personalized login and registration experience.
+        </p>
+      </div>
+
+      <div class="role-selection-grid">
+        <!-- Customer Role Card -->
+        <div class="role-card" id="btnSelectCustomer" role="button" tabindex="0" aria-label="Select Customer Account">
+          <div class="role-card-icon">👤</div>
+          <h2 class="role-card-title">I am a Customer</h2>
+          <p class="role-card-desc">
+            Find trusted technicians near you, book doorstep repairs, track appliance maintenance records, and search with voice.
+          </p>
+          <button class="btn btn-primary btn-lg" style="width: 100%; pointer-events: none;">
+            Continue as Customer &rarr;
+          </button>
+        </div>
+
+        <!-- Service Provider Role Card -->
+        <div class="role-card" id="btnSelectProvider" role="button" tabindex="0" aria-label="Select Service Provider Account">
+          <div class="role-card-icon">🔧</div>
+          <h2 class="role-card-title">I am a Service Provider</h2>
+          <p class="role-card-desc">
+            Receive nearby customer service requests, manage repair jobs, showcase verified skills, and grow your local earnings.
+          </p>
+          <button class="btn btn-secondary btn-lg" style="width: 100%; pointer-events: none; border-color: var(--secondary);">
+            Provider Portal &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Customer Login / Signup View -->
+    <div class="auth-container-wrap" id="customerAuthView" style="display: none;">
+      <div class="auth-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <span class="auth-role-pill">👤 Customer Account</span>
+          <button class="btn btn-secondary btn-sm" onclick="window.FixNowAuthUI.showRoleSelection()" style="padding: 4px 10px; font-size: 0.82rem;">
+            &larr; Change Role
+          </button>
+        </div>
+
+        <!-- Customer Auth Tabs (Login / Signup) -->
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="btnCustomerTabLogin" onclick="window.FixNowAuthUI.setCustomerTab('login')">
+            Customer Login
+          </button>
+          <button class="auth-tab-btn" id="btnCustomerTabSignup" onclick="window.FixNowAuthUI.setCustomerTab('signup')">
+            New Customer Signup
+          </button>
+        </div>
+
+
+        <!-- Customer Login Form -->
+        <form id="customerLoginForm">
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="custLoginIdent">Email or Mobile Number</label>
+            <div class="input-with-icon">
+              <span class="input-icon">👤</span>
+              <input type="text" id="custLoginIdent" class="form-control" placeholder="Enter registered email or mobile" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="custLoginPass">Password</label>
+            <div class="input-with-icon">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="custLoginPass" class="form-control" placeholder="Enter your password" required>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; font-size: 0.9rem;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="custRememberMe" checked>
+              <span>Remember me</span>
+            </label>
+            <a href="#!" onclick="window.FixNow.showToast('Password reset link sent to registered mobile/email.', 'info')" style="color: var(--primary); font-weight: 600;">
+              Forgot Password?
+            </a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+            Login to Customer Account
+          </button>
+        </form>
+
+        <!-- Customer Signup Form -->
+        <form id="customerSignupForm" style="display: none;">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" for="custSignupName">Full Name</label>
+            <input type="text" id="custSignupName" class="form-control" placeholder="Enter your full name" required>
+          </div>
+
+          <div class="form-grid-2" style="margin-bottom: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="custSignupMobile">Mobile Number</label>
+              <input type="tel" id="custSignupMobile" class="form-control" placeholder="10-digit mobile" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="custSignupEmail">Email Address</label>
+              <input type="email" id="custSignupEmail" class="form-control" placeholder="name@example.com" required>
+            </div>
+          </div>
+
+          <!-- Customer Location Acquisition Card (Realistic GPS, Map Pin, Manual Geocoding) -->
+          <div style="background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <label class="form-label" style="font-weight: 700; color: var(--secondary); margin: 0;">
+                📍 Your Home / Service Location *
+              </label>
+              <span class="badge badge-verified" id="custLocConfirmedBadge" style="display: none;">✓ Location Pinned</span>
+            </div>
+            
+            <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.45;">
+              FixNow matches you with nearby technicians using real GPS distance. Choose how to set your location:
+            </p>
+
+            <!-- 3 Location Capture Options -->
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+              <button type="button" class="btn btn-primary btn-sm" id="btnCustUseGps" onclick="window.FixNowLocationPicker.useCurrentLocation('customer')">
+                🎯 Use My Current Location
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnCustPickMap" onclick="window.FixNowLocationPicker.openMapModal('customer')">
+                🗺️ Choose Location on Map
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnCustManualToggle" onclick="window.FixNowLocationPicker.toggleManualFields('customer')">
+                📝 Enter Address Manually
+              </button>
+            </div>
+
+            <!-- Active Confirmed Base Location Preview Box -->
+            <div id="custLocDisplayBox" style="background: white; border: 1px dashed #93c5fd; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; font-size: 0.88rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                <div>
+                  <strong style="color: var(--secondary);">Confirmed Location:</strong>
+                  <span id="custLocDisplayAddress" style="color: var(--text-main);">No location set yet. Use GPS, map, or manual entry.</span>
+                </div>
+                <div style="font-size: 0.82rem; color: #2563eb; font-weight: 600;">
+                  GPS: <span id="custLocDisplayCoords">Coordinates pending</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hidden Inputs for Coordinates -->
+            <input type="hidden" id="custSignupLat" value="">
+            <input type="hidden" id="custSignupLng" value="">
+
+            <!-- Manual Address Fields (Collapsible) -->
+            <div id="custManualAddressGroup" style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color);">
+              <div class="form-group" style="margin-bottom: 10px;">
+                <label class="form-label" for="custSignupAddress">Flat / House / Street Address *</label>
+                <input type="text" id="custSignupAddress" class="form-control" placeholder="e.g. Flat 302, Sai Residency, Station Road">
+              </div>
+
+              <div class="form-grid-2" style="margin-bottom: 10px;">
+                <div class="form-group">
+                  <label class="form-label" for="custSignupArea">Village / Locality / Ward *</label>
+                  <input type="text" id="custSignupArea" class="form-control" placeholder="e.g. Ward 4, Rampur Colony">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="custSignupCity">City / Town *</label>
+                  <input type="text" id="custSignupCity" class="form-control" placeholder="e.g. Hyderabad / Rampur">
+                </div>
+              </div>
+
+              <div class="form-grid-2" style="margin-bottom: 10px;">
+                <div class="form-group">
+                  <label class="form-label" for="custSignupPin">PIN Code *</label>
+                  <input type="text" id="custSignupPin" class="form-control" placeholder="e.g. 500003" maxlength="6">
+                </div>
+                <div class="form-group" style="justify-content: flex-end;">
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="window.FixNowLocationPicker.geocodeManualAddress('customer')" style="height: 44px; margin-top: 24px;">
+                    📍 Verify &amp; Geocode Address
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid-2" style="margin-bottom: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="custSignupPass">Password</label>
+              <input type="password" id="custSignupPass" class="form-control" placeholder="Create strong password" required minlength="8" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="custSignupPassConfirm">Confirm Password</label>
+              <input type="password" id="custSignupPassConfirm" class="form-control" placeholder="Confirm password" required minlength="8" autocomplete="new-password">
+            </div>
+          </div>
+
+          <!-- Strict Password Policy Interactive Checklist -->
+          <div class="password-policy-card" id="custPassPolicyBox" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; font-size: 0.82rem;">
+            <div style="font-weight: 700; color: #334155; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <span>🔒</span> Password Security Policy:
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 6px;">
+              <div id="custReqLen" class="pass-req-item"><span class="req-icon">⚪</span> 8+ characters</div>
+              <div id="custReqUpper" class="pass-req-item"><span class="req-icon">⚪</span> At least 1 uppercase (A–Z)</div>
+              <div id="custReqLower" class="pass-req-item"><span class="req-icon">⚪</span> At least 1 lowercase (a–z)</div>
+              <div id="custReqNum" class="pass-req-item"><span class="req-icon">⚪</span> At least 1 number (0–9)</div>
+              <div id="custReqSpecial" class="pass-req-item"><span class="req-icon">⚪</span> At least 1 special char (@, #, $, etc.)</div>
+              <div id="custReqMatch" class="pass-req-item"><span class="req-icon">⚪</span> Passwords match</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+            Create Customer Account
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- STEP 3: Service Provider Login / Signup View -->
+    <div class="auth-container-wrap" id="providerAuthView" style="display: none; max-width: 680px;">
+      <div class="auth-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <span class="auth-role-pill" style="background: #eff6ff; color: #1e40af;">🔧 Service Provider Portal</span>
+          <button class="btn btn-secondary btn-sm" onclick="window.FixNowAuthUI.showRoleSelection()" style="padding: 4px 10px; font-size: 0.82rem;">
+            &larr; Change Role
+          </button>
+        </div>
+
+        <!-- Provider Auth Tabs (Login / Signup) -->
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="btnProviderTabLogin" onclick="window.FixNowAuthUI.setProviderTab('login')">
+            Provider Login
+          </button>
+          <button class="auth-tab-btn" id="btnProviderTabSignup" onclick="window.FixNowAuthUI.setProviderTab('signup')">
+            Register as Provider
+          </button>
+        </div>
+
+
+        <!-- Provider Login Form -->
+        <form id="providerLoginForm">
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="provLoginIdent">Provider Email or Mobile</label>
+            <div class="input-with-icon">
+              <span class="input-icon">🔧</span>
+              <input type="text" id="provLoginIdent" class="form-control" placeholder="Enter provider registered email or mobile" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="provLoginPass">Password</label>
+            <div class="input-with-icon">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="provLoginPass" class="form-control" placeholder="Enter provider password" required>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; font-size: 0.9rem;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="provRememberMe" checked>
+              <span>Remember me</span>
+            </label>
+            <a href="#!" onclick="window.FixNow.showToast('Provider password recovery link sent via SMS.', 'info')" style="color: var(--primary); font-weight: 600;">
+              Forgot Password?
+            </a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+            Login to Provider Dashboard &rarr;
+          </button>
+        </form>
+
+        <!-- Provider Signup Form -->
+        <form id="providerSignupForm" style="display: none;">
+          <div class="form-grid-2" style="margin-bottom: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="provSignupName">Full Name</label>
+              <input type="text" id="provSignupName" class="form-control" placeholder="Enter provider full name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="provSignupMobile">Mobile Number</label>
+              <input type="tel" id="provSignupMobile" class="form-control" placeholder="10-digit mobile" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2" style="margin-bottom: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="provSignupEmail">Email Address</label>
+              <input type="email" id="provSignupEmail" class="form-control" placeholder="provider@example.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="provSignupCategory">Primary Service Category</label>
+              <select id="provSignupCategory" class="form-select" required>
+                <option value="ac-repair">AC Repair</option>
+                <option value="plumber">Plumber</option>
+                <option value="electrician">Electrician</option>
+                <option value="mechanic">Mechanic</option>
+                <option value="refrigerator">Refrigerator Repair</option>
+                <option value="washing-machine">Washing Machine</option>
+                <option value="ro-water">RO / Water Purifier</option>
+                <option value="tv-repair">TV Repair</option>
+                <option value="carpenter">Carpenter</option>
+                <option value="painter">Painter</option>
+                <option value="labourer">Labourer</option>
+                <option value="beautician">Beautician / Salon</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" for="provSignupExp">Years of Experience</label>
+            <input type="number" id="provSignupExp" class="form-control" placeholder="e.g. 8" min="0" max="50" required>
+          </div>
+
+          <!-- Base Service Location & Coverage Radius Card -->
+          <div style="background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <label class="form-label" style="font-weight: 700; color: var(--secondary); margin: 0;">
+                📍 Base Service Location & Coverage Radius *
+              </label>
+              <span class="badge badge-verified" id="provLocConfirmedBadge" style="display: none;">✓ Location Pinned</span>
+            </div>
+            
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.45;">
+              FixNow matches you with nearby customers based on your verified base location and service radius. Choose how to set your workshop or home service base:
+            </p>
+
+            <!-- 3 Location Capture Options -->
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+              <button type="button" class="btn btn-primary btn-sm" id="btnProvUseGps" onclick="window.FixNowLocationPicker.useCurrentLocation('provider')">
+                🎯 Use My Current Location
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnProvPickMap" onclick="window.FixNowLocationPicker.openMapModal('provider')">
+                🗺️ Choose Location on Map
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnProvManualToggle" onclick="window.FixNowLocationPicker.toggleManualFields('provider')">
+                📝 Enter Address Manually
+              </button>
+            </div>
+
+            <!-- Active Confirmed Base Location Preview Box -->
+            <div id="provLocDisplayBox" style="background: white; border: 1px dashed #93c5fd; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; font-size: 0.9rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                <div>
+                  <strong style="color: var(--secondary);">Confirmed Base:</strong>
+                  <span id="provLocDisplayAddress" style="color: var(--text-main);">No base location set yet. Use GPS, map, or manual entry.</span>
+                </div>
+                <div style="font-size: 0.82rem; color: #2563eb; font-weight: 600;">
+                  GPS: <span id="provLocDisplayCoords">Coordinates pending</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hidden Inputs for Coordinates -->
+            <input type="hidden" id="provSignupLat" value="">
+            <input type="hidden" id="provSignupLng" value="">
+
+            <!-- Manual Address Fields (Collapsible) -->
+            <div id="provManualAddressGroup" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+              <div class="form-group" style="margin-bottom: 10px;">
+                <label class="form-label" for="provSignupAddress">Street Address / Shop / Landmark *</label>
+                <input type="text" id="provSignupAddress" class="form-control" placeholder="e.g. Shop 4, Annapurna Complex, Main Road" required>
+              </div>
+
+              <div class="form-grid-2" style="margin-bottom: 10px;">
+                <div class="form-group">
+                  <label class="form-label" for="provSignupArea">Area / Locality / Ward</label>
+                  <input type="text" id="provSignupArea" class="form-control" placeholder="e.g. Gandhi Nagar / Ward 2">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="provSignupCity">City / Town</label>
+                  <input type="text" id="provSignupCity" class="form-control" placeholder="e.g. Hyderabad / Rampur">
+                </div>
+              </div>
+
+              <div class="form-grid-2" style="margin-bottom: 10px;">
+                <div class="form-group">
+                  <label class="form-label" for="provSignupPin">PIN Code</label>
+                  <input type="text" id="provSignupPin" class="form-control" placeholder="e.g. 500003" maxlength="6">
+                </div>
+                <div class="form-group" style="justify-content: flex-end;">
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="window.FixNowLocationPicker.geocodeManualAddress('provider')" style="height: 44px; margin-top: 24px;">
+                    📍 Verify &amp; Geocode Address
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mandatory Service Coverage Radius Selection -->
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label" for="provSignupRadius" style="font-weight: 700;">Service Coverage Radius *</label>
+              <select id="provSignupRadius" class="form-select" required>
+                <option value="5">5 km — Immediate Ward / Local Village</option>
+                <option value="10" selected>10 km — City &amp; Nearby Suburbs (Standard)</option>
+                <option value="20">20 km — Extended Rural Cluster &amp; Neighboring Villages</option>
+              </select>
+              <small style="color: var(--text-muted); font-size: 0.8rem; margin-top: 4px; display: block;">
+                Customers beyond this travel distance will not see your profile in their results.
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" for="provSignupDesc">Short Description / Bio</label>
+            <textarea id="provSignupDesc" class="form-control" rows="2" placeholder="Tell customers about your skills, tools carried, and specialties..." required></textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" for="provSignupServices">Services Offered (comma-separated)</label>
+            <input type="text" id="provSignupServices" class="form-control" placeholder="e.g. Jet Cleaning, Gas Top-up, Wiring Fix" required>
+          </div>
+
+          <div class="form-grid-2" style="margin-bottom: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="provSignupPass">Password</label>
+              <input type="password" id="provSignupPass" class="form-control" placeholder="Create strong password" required minlength="8" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="provSignupPassConfirm">Confirm Password</label>
+              <input type="password" id="provSignupPassConfirm" class="form-control" placeholder="Confirm password" required minlength="8" autocomplete="new-password">
+            </div>
+          </div>
+
+          <!-- Strict Password Policy Interactive Checklist -->
+          <div class="password-policy-card" id="provPassPolicyBox" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; font-size: 0.82rem;">
+            <div style="font-weight: 700; color: #334155; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <span>🔒</span> Password Security Policy:
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 6px;">
+              <div id="provReqLen" class="pass-req-item"><span class="req-icon">⚪</span> 8+ characters</div>
+              <div id="provReqUpper" class="pass-req-item"><span class="req-icon">⚪</span> At least 1 uppercase (A–Z)</div>
+              <div id="provReqLower" class="pass-req-item"><span class="req-icon">⚪</span> At least 1 lowercase (a–z)</div>
+              <div id="provReqNum" class="pass-req-item"><span class="req-icon">⚪</span> At least 1 number (0–9)</div>
+              <div id="provReqSpecial" class="pass-req-item"><span class="req-icon">⚪</span> At least 1 special char (@, #, $, etc.)</div>
+              <div id="provReqMatch" class="pass-req-item"><span class="req-icon">⚪</span> Passwords match</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+            Complete Service Provider Registration
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Interactive Leaflet Map Picker Modal -->
+    <div id="provLocationMapModal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.7); backdrop-filter: blur(4px); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
+      <div style="background: white; border-radius: 16px; padding: 24px; max-width: 650px; width: 100%; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; max-height: 90vh;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="margin: 0; font-size: 1.2rem; color: var(--secondary);">🗺️ Choose Service Base on Map</h3>
+          <button type="button" onclick="window.FixNowLocationPicker.closeMapModal()" style="background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+          Click anywhere on the map or drag the pin to set your exact workshop or service base location.
+        </p>
+
+        <!-- Search in modal -->
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <input type="text" id="mapModalSearchInput" class="form-control" placeholder="Search locality or landmark in map..." style="font-size: 0.9rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.FixNowLocationPicker.searchInMap()">Search</button>
+        </div>
+
+        <!-- Map Canvas -->
+        <div id="provPickerMap" style="height: 320px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px;"></div>
+
+        <div style="background: #f8fafc; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div><strong>Selected Pin:</strong> <span id="mapModalAddressPreview">Rampur Center</span></div>
+          <div style="color: #2563eb; font-weight: 600;">(<span id="mapModalCoordsPreview">17.4400, 78.4980</span>)</div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="window.FixNowLocationPicker.closeMapModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="window.FixNowLocationPicker.confirmMapLocation()">Confirm Pin Location</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 FixNow. All rights reserved.</div>
+        <div class="footer-prototype-note">
+          Role-Based Auth Prototype &bull; Customer & Service Provider Portals
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/authVoice.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    // Authentication UI Controller
+    (function () {
+      'use strict';
+
+      const roleSelectionView = document.getElementById('roleSelectionView');
+      const customerAuthView = document.getElementById('customerAuthView');
+      const providerAuthView = document.getElementById('providerAuthView');
+
+      function showRoleSelection() {
+        roleSelectionView.style.display = 'block';
+        customerAuthView.style.display = 'none';
+        providerAuthView.style.display = 'none';
+        window.history.replaceState({}, '', 'auth.html');
+        if (window.FixNowAuthVoice) window.FixNowAuthVoice.onViewOrTabChange();
+      }
+
+      function showCustomerView() {
+        roleSelectionView.style.display = 'none';
+        customerAuthView.style.display = 'block';
+        providerAuthView.style.display = 'none';
+        setCustomerTab('login');
+        if (window.FixNowAuthVoice) window.FixNowAuthVoice.onViewOrTabChange();
+      }
+
+      function showProviderView() {
+        roleSelectionView.style.display = 'none';
+        customerAuthView.style.display = 'none';
+        providerAuthView.style.display = 'block';
+        setProviderTab('login');
+        if (window.FixNowAuthVoice) window.FixNowAuthVoice.onViewOrTabChange();
+      }
+
+      function setCustomerTab(tab) {
+        const isLogin = tab === 'login';
+        document.getElementById('btnCustomerTabLogin').classList.toggle('active', isLogin);
+        document.getElementById('btnCustomerTabSignup').classList.toggle('active', !isLogin);
+        document.getElementById('customerLoginForm').style.display = isLogin ? 'block' : 'none';
+        document.getElementById('customerSignupForm').style.display = isLogin ? 'none' : 'block';
+        if (window.FixNowAuthVoice) window.FixNowAuthVoice.onViewOrTabChange();
+      }
+
+      function setProviderTab(tab) {
+        const isLogin = tab === 'login';
+        document.getElementById('btnProviderTabLogin').classList.toggle('active', isLogin);
+        document.getElementById('btnProviderTabSignup').classList.toggle('active', !isLogin);
+        document.getElementById('providerLoginForm').style.display = isLogin ? 'block' : 'none';
+        document.getElementById('providerSignupForm').style.display = isLogin ? 'none' : 'block';
+        if (window.FixNowAuthVoice) window.FixNowAuthVoice.onViewOrTabChange();
+      }
+
+
+      // Event Listeners
+      document.getElementById('btnSelectCustomer').addEventListener('click', showCustomerView);
+      document.getElementById('btnSelectProvider').addEventListener('click', showProviderView);
+
+      // Customer Login submit
+      document.getElementById('customerLoginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const ident = document.getElementById('custLoginIdent').value;
+        const pass = document.getElementById('custLoginPass').value;
+        const res = window.FixNowAuth.login(ident, pass, 'customer');
+
+        if (res.success) {
+          window.FixNow.showToast(`Welcome back, ${res.user.fullName}!`, 'success');
+          setTimeout(() => { window.location.href = res.redirectUrl; }, 500);
+        } else {
+          window.FixNow.showToast(res.message, 'warning');
+        }
+      });
+
+      // Real-time Password Policy Live Checklist UI updater
+      function updatePasswordChecklist(passVal, passConfVal, prefix) {
+        if (!window.FixNowAuth || !window.FixNowAuth.validatePassword) return;
+        const check = window.FixNowAuth.validatePassword(passVal, passConfVal);
+
+        const updateItem = (id, valid) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const icon = el.querySelector('.req-icon');
+          if (valid) {
+            el.style.color = '#15803d';
+            el.style.fontWeight = '600';
+            if (icon) icon.textContent = '✅';
+          } else {
+            el.style.color = '#64748b';
+            el.style.fontWeight = 'normal';
+            if (icon) icon.textContent = '⚪';
+          }
+        };
+
+        updateItem(`${prefix}ReqLen`, check.rules.minLength);
+        updateItem(`${prefix}ReqUpper`, check.rules.uppercase);
+        updateItem(`${prefix}ReqLower`, check.rules.lowercase);
+        updateItem(`${prefix}ReqNum`, check.rules.number);
+        updateItem(`${prefix}ReqSpecial`, check.rules.specialChar);
+        updateItem(`${prefix}ReqMatch`, check.rules.matchConfirm);
+
+        return check;
+      }
+
+      // Attach live listeners for Customer Password Checklist
+      ['custSignupPass', 'custSignupPassConfirm'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', () => {
+            const p = document.getElementById('custSignupPass')?.value || '';
+            const cp = document.getElementById('custSignupPassConfirm')?.value || '';
+            updatePasswordChecklist(p, cp, 'cust');
+          });
+        }
+      });
+
+      // Attach live listeners for Provider Password Checklist
+      ['provSignupPass', 'provSignupPassConfirm'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', () => {
+            const p = document.getElementById('provSignupPass')?.value || '';
+            const cp = document.getElementById('provSignupPassConfirm')?.value || '';
+            updatePasswordChecklist(p, cp, 'prov');
+          });
+        }
+      });
+
+      // Customer Signup submit
+      document.getElementById('customerSignupForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('custSignupName').value.trim();
+        const mobile = document.getElementById('custSignupMobile').value.trim();
+        const email = document.getElementById('custSignupEmail').value.trim();
+        const address = document.getElementById('custSignupAddress')?.value.trim() || '';
+        const area = document.getElementById('custSignupArea')?.value.trim() || '';
+        const city = document.getElementById('custSignupCity')?.value.trim() || '';
+        const pin = document.getElementById('custSignupPin')?.value.trim() || '';
+        const latVal = document.getElementById('custSignupLat')?.value;
+        const lngVal = document.getElementById('custSignupLng')?.value;
+        const lat = latVal ? parseFloat(latVal) : null;
+        const lng = lngVal ? parseFloat(lngVal) : null;
+        const pass = document.getElementById('custSignupPass').value;
+        const passConf = document.getElementById('custSignupPassConfirm').value;
+
+        // Enforce strict password policy
+        const passCheck = window.FixNowAuth.validatePassword(pass, passConf);
+        if (!passCheck.isValid) {
+          window.FixNow.showToast(passCheck.errors[0] || 'Password does not meet the security policy requirements.', 'warning');
+          return;
+        }
+
+        const fullLoc = [address, area, city, pin].filter(Boolean).join(', ') || 'Customer Home Location';
+
+        const res = window.FixNowAuth.signup({
+          fullName: name,
+          mobile: mobile,
+          email: email,
+          location: fullLoc,
+          serviceLocation: fullLoc,
+          address: address,
+          area: area,
+          city: city,
+          pincode: pin,
+          latitude: lat,
+          longitude: lng,
+          password: pass,
+          confirmPassword: passConf
+        }, 'customer');
+
+        if (res.success) {
+          window.FixNow.showToast('Customer account created successfully!', 'success');
+          setTimeout(() => { window.location.href = res.redirectUrl; }, 600);
+        } else {
+          window.FixNow.showToast(res.message, 'warning');
+        }
+      });
+
+      // Provider Login submit
+      document.getElementById('providerLoginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const ident = document.getElementById('provLoginIdent').value;
+        const pass = document.getElementById('provLoginPass').value;
+        const res = window.FixNowAuth.login(ident, pass, 'provider');
+
+        if (res.success) {
+          window.FixNow.showToast(`Welcome to your portal, ${res.user.fullName}!`, 'success');
+          setTimeout(() => { window.location.href = res.redirectUrl; }, 500);
+        } else {
+          window.FixNow.showToast(res.message, 'warning');
+        }
+      });
+
+      // Provider Signup submit
+      document.getElementById('providerSignupForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('provSignupName').value.trim();
+        const mobile = document.getElementById('provSignupMobile').value.trim();
+        const email = document.getElementById('provSignupEmail').value.trim();
+        const category = document.getElementById('provSignupCategory').value;
+        const exp = parseInt(document.getElementById('provSignupExp').value, 10);
+        const address = document.getElementById('provSignupAddress').value.trim();
+        const area = document.getElementById('provSignupArea')?.value.trim() || '';
+        const city = document.getElementById('provSignupCity')?.value.trim() || '';
+        const pin = document.getElementById('provSignupPin')?.value.trim() || '';
+        const latVal = document.getElementById('provSignupLat')?.value;
+        const lngVal = document.getElementById('provSignupLng')?.value;
+        const lat = latVal ? parseFloat(latVal) : null;
+        const lng = lngVal ? parseFloat(lngVal) : null;
+        const radius = parseInt(document.getElementById('provSignupRadius').value, 10) || 10;
+        const desc = document.getElementById('provSignupDesc').value.trim();
+        const services = document.getElementById('provSignupServices').value.split(',').map(s => s.trim()).filter(Boolean);
+        const pass = document.getElementById('provSignupPass').value;
+        const passConf = document.getElementById('provSignupPassConfirm').value;
+
+        // Enforce strict password policy
+        const passCheck = window.FixNowAuth.validatePassword(pass, passConf);
+        if (!passCheck.isValid) {
+          window.FixNow.showToast(passCheck.errors[0] || 'Password does not meet the security policy requirements.', 'warning');
+          return;
+        }
+
+        const loc = [address, area, city].filter(Boolean).join(', ') + (city ? ` (${radius} km radius)` : '');
+
+        const res = window.FixNowAuth.signup({
+          fullName: name,
+          mobile: mobile,
+          email: email,
+          serviceCategory: category,
+          serviceTitle: category.replace('-', ' ').toUpperCase() + ' Specialist',
+          experienceYears: exp,
+          serviceLocation: loc,
+          address: address,
+          serviceArea: area,
+          city: city,
+          pincode: pin,
+          latitude: lat,
+          longitude: lng,
+          serviceRadius: radius,
+          shortDescription: desc,
+          servicesOffered: services,
+          password: pass,
+          confirmPassword: passConf,
+          avatar: category === 'beautician'
+            ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=faces'
+            : 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=200&h=200&fit=crop&crop=faces'
+        }, 'provider');
+
+        if (res.success) {
+          window.FixNow.showToast('Service Provider account registered successfully!', 'success');
+          setTimeout(() => { window.location.href = res.redirectUrl; }, 600);
+        } else {
+          window.FixNow.showToast(res.message, 'warning');
+        }
+      });
+
+      // Check URL parameters for direct role entry (e.g. auth.html?role=customer or auth.html?role=provider)
+      const urlParams = new URLSearchParams(window.location.search);
+      const roleParam = urlParams.get('role');
+      if (roleParam === 'customer') showCustomerView();
+      else if (roleParam === 'provider') showProviderView();
+
+      // Export UI methods
+      window.FixNowAuthUI = {
+        showRoleSelection: showRoleSelection,
+        showCustomerView: showCustomerView,
+        showProviderView: showProviderView,
+        setCustomerTab: setCustomerTab,
+        setProviderTab: setProviderTab
+      };
+    })();
+
+    // Location Picker Controller supporting both Customer and Provider (GPS, Leaflet Map Modal, Nominatim Reverse/Forward Geocoding)
+    (function () {
+      let pickerMap = null;
+      let pickerMarker = null;
+      let activeTarget = 'provider'; // 'customer' or 'provider'
+      let selectedCoords = { lat: 17.4400, lng: 78.4980 };
+      let selectedAddressText = "";
+
+      function getPrefix(role) {
+        return (role || activeTarget) === 'customer' ? 'cust' : 'prov';
+      }
+
+      function toggleManualFields(role) {
+        if (role) activeTarget = role;
+        const prefix = getPrefix(role);
+        const group = document.getElementById(`${prefix}ManualAddressGroup`);
+        if (group) {
+          const isHidden = group.style.display === 'none';
+          group.style.display = isHidden ? 'block' : 'none';
+          if (isHidden) {
+            const addrEl = document.getElementById(`${prefix}SignupAddress`);
+            if (addrEl) addrEl.focus();
+          }
+        }
+      }
+
+      function updateLocationDisplay(lat, lng, addressText, role) {
+        const prefix = getPrefix(role);
+        selectedCoords = { lat: parseFloat(lat.toFixed(6)), lng: parseFloat(lng.toFixed(6)) };
+        selectedAddressText = addressText || `${selectedCoords.lat}, ${selectedCoords.lng}`;
+
+        const latInput = document.getElementById(`${prefix}SignupLat`);
+        const lngInput = document.getElementById(`${prefix}SignupLng`);
+        const displayAddr = document.getElementById(`${prefix}LocDisplayAddress`);
+        const displayCoords = document.getElementById(`${prefix}LocDisplayCoords`);
+        const badge = document.getElementById(`${prefix}LocConfirmedBadge`);
+
+        if (latInput) latInput.value = selectedCoords.lat;
+        if (lngInput) lngInput.value = selectedCoords.lng;
+        if (displayAddr) displayAddr.textContent = selectedAddressText;
+        if (displayCoords) displayCoords.textContent = `${selectedCoords.lat}, ${selectedCoords.lng}`;
+        if (badge) badge.style.display = 'inline-block';
+      }
+
+      // 1. Current Location (Browser GPS + Nominatim Reverse Geocoding)
+      function useCurrentLocation(role) {
+        if (role) activeTarget = role;
+        const prefix = getPrefix(role);
+
+        if (!navigator.geolocation) {
+          window.FixNow.showToast('Geolocation is not supported by your browser.', 'warning');
+          return;
+        }
+
+        window.FixNow.showToast('Detecting your GPS location...', 'info');
+
+        navigator.geolocation.getCurrentPosition(
+          async function (pos) {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+
+            // Reverse geocode via OpenStreetMap Nominatim
+            try {
+              const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`, {
+                headers: { 'Accept': 'application/json' }
+              });
+              if (res.ok) {
+                const data = await res.json();
+                const display = data.display_name ? data.display_name.split(',').slice(0, 3).join(',') : `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+                updateLocationDisplay(lat, lng, display, activeTarget);
+
+                if (data.address) {
+                  const addrInput = document.getElementById(`${prefix}SignupAddress`);
+                  const areaInput = document.getElementById(`${prefix}SignupArea`);
+                  const cityInput = document.getElementById(`${prefix}SignupCity`);
+                  const pinInput = document.getElementById(`${prefix}SignupPin`);
+
+                  if (addrInput) addrInput.value = data.address.road || data.address.suburb || display;
+                  if (areaInput) areaInput.value = data.address.suburb || data.address.neighbourhood || '';
+                  if (cityInput) cityInput.value = data.address.city || data.address.town || data.address.village || 'Rampur';
+                  if (pinInput && data.address.postcode) pinInput.value = data.address.postcode;
+                }
+                window.FixNow.showToast('Location detected from GPS!', 'success');
+                return;
+              }
+            } catch (err) {}
+
+            updateLocationDisplay(lat, lng, `GPS Point (${lat.toFixed(4)}, ${lng.toFixed(4)})`, activeTarget);
+            window.FixNow.showToast('Location detected from GPS!', 'success');
+          },
+          function (err) {
+            window.FixNow.showToast('Location access is required to find nearby services. Please pick on map or enter manually.', 'warning');
+          },
+          { timeout: 10000, enableHighAccuracy: true }
+        );
+      }
+
+      // 2. Leaflet Map Modal
+      function openMapModal(role) {
+        if (role) activeTarget = role;
+        const modal = document.getElementById('provLocationMapModal');
+        if (!modal) return;
+        modal.style.display = 'flex';
+
+        setTimeout(() => {
+          initOrUpdatePickerMap();
+        }, 150);
+      }
+
+      function closeMapModal() {
+        const modal = document.getElementById('provLocationMapModal');
+        if (modal) modal.style.display = 'none';
+      }
+
+      function initOrUpdatePickerMap() {
+        const prefix = getPrefix(activeTarget);
+        const latInputVal = parseFloat(document.getElementById(`${prefix}SignupLat`)?.value);
+        const lngInputVal = parseFloat(document.getElementById(`${prefix}SignupLng`)?.value);
+
+        const curLat = !isNaN(latInputVal) ? latInputVal : selectedCoords.lat;
+        const curLng = !isNaN(lngInputVal) ? lngInputVal : selectedCoords.lng;
+
+        if (!pickerMap && typeof L !== 'undefined') {
+          pickerMap = L.map('provPickerMap').setView([curLat, curLng], 14);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap'
+          }).addTo(pickerMap);
+
+          pickerMarker = L.marker([curLat, curLng], { draggable: true }).addTo(pickerMap);
+          pickerMarker.bindTooltip('Drag pin to your exact location', { permanent: true, direction: 'top' });
+
+          pickerMarker.on('dragend', function (e) {
+            const pos = e.target.getLatLng();
+            handleMapPinChange(pos.lat, pos.lng);
+          });
+
+          pickerMap.on('click', function (e) {
+            pickerMarker.setLatLng(e.latlng);
+            handleMapPinChange(e.latlng.lat, e.latlng.lng);
+          });
+        } else if (pickerMap) {
+          pickerMap.invalidateSize();
+          pickerMap.setView([curLat, curLng], 14);
+          if (pickerMarker) pickerMarker.setLatLng([curLat, curLng]);
+        }
+
+        handleMapPinChange(curLat, curLng);
+      }
+
+      async function handleMapPinChange(lat, lng) {
+        const previewCoords = document.getElementById('mapModalCoordsPreview');
+        const previewAddr = document.getElementById('mapModalAddressPreview');
+        if (previewCoords) previewCoords.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+          if (res.ok) {
+            const data = await res.json();
+            const text = data.display_name ? data.display_name.split(',').slice(0, 3).join(',') : `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+            if (previewAddr) previewAddr.textContent = text;
+            pickerMarker._tempAddress = text;
+            pickerMarker._tempData = data;
+            return;
+          }
+        } catch (e) {}
+
+        if (previewAddr) previewAddr.textContent = `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+        if (pickerMarker) pickerMarker._tempAddress = `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+      }
+
+      function confirmMapLocation() {
+        if (!pickerMarker) return;
+        const pos = pickerMarker.getLatLng();
+        const addr = pickerMarker._tempAddress || document.getElementById('mapModalAddressPreview').textContent;
+        const prefix = getPrefix(activeTarget);
+
+        updateLocationDisplay(pos.lat, pos.lng, addr, activeTarget);
+
+        const addrInput = document.getElementById(`${prefix}SignupAddress`);
+        if (addrInput) addrInput.value = addr;
+
+        if (pickerMarker._tempData && pickerMarker._tempData.address) {
+          const d = pickerMarker._tempData.address;
+          const areaInput = document.getElementById(`${prefix}SignupArea`);
+          const cityInput = document.getElementById(`${prefix}SignupCity`);
+          const pinInput = document.getElementById(`${prefix}SignupPin`);
+          if (areaInput && !areaInput.value) areaInput.value = d.suburb || d.neighbourhood || '';
+          if (cityInput && !cityInput.value) cityInput.value = d.city || d.town || d.village || 'Rampur';
+          if (pinInput && !pinInput.value && d.postcode) pinInput.value = d.postcode;
+        }
+
+        closeMapModal();
+        window.FixNow.showToast('Location confirmed from map pin!', 'success');
+      }
+
+      async function searchInMap() {
+        const input = document.getElementById('mapModalSearchInput');
+        if (!input || !input.value.trim() || !pickerMap) return;
+
+        const q = input.value.trim();
+        window.FixNow.showToast('Locating on map...', 'info');
+
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`);
+          if (res.ok) {
+            const results = await res.json();
+            if (results && results.length > 0) {
+              const r = results[0];
+              const lat = parseFloat(r.lat);
+              const lng = parseFloat(r.lon);
+              pickerMap.setView([lat, lng], 15);
+              pickerMarker.setLatLng([lat, lng]);
+              handleMapPinChange(lat, lng);
+              return;
+            }
+          }
+        } catch (e) {}
+        window.FixNow.showToast('Location not found. Try dragging the pin.', 'info');
+      }
+
+      // 3. Manual Geocoding via Nominatim
+      async function geocodeManualAddress(role) {
+        if (role) activeTarget = role;
+        const prefix = getPrefix(role);
+
+        const addr = document.getElementById(`${prefix}SignupAddress`)?.value.trim() || '';
+        const area = document.getElementById(`${prefix}SignupArea`)?.value.trim() || '';
+        const city = document.getElementById(`${prefix}SignupCity`)?.value.trim() || '';
+        const pin = document.getElementById(`${prefix}SignupPin`)?.value.trim() || '';
+
+        const fullQuery = [addr, area, city, pin].filter(Boolean).join(', ');
+        if (!fullQuery) {
+          window.FixNow.showToast('Please enter an address or PIN code to verify.', 'warning');
+          return;
+        }
+
+        window.FixNow.showToast('Verifying coordinates with OpenStreetMap...', 'info');
+
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullQuery)}&limit=1`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.length > 0) {
+              const lat = parseFloat(data[0].lat);
+              const lng = parseFloat(data[0].lon);
+              updateLocationDisplay(lat, lng, fullQuery, activeTarget);
+              window.FixNow.showToast('Address coordinates verified successfully!', 'success');
+              return;
+            }
+          }
+        } catch (e) {}
+
+        // Fallback default
+        updateLocationDisplay(17.4400, 78.4980, fullQuery, activeTarget);
+        window.FixNow.showToast('Address set with regional coordinates.', 'info');
+      }
+
+      window.FixNowLocationPicker = {
+        useCurrentLocation: useCurrentLocation,
+        openMapModal: openMapModal,
+        closeMapModal: closeMapModal,
+        confirmMapLocation: confirmMapLocation,
+        searchInMap: searchInMap,
+        geocodeManualAddress: geocodeManualAddress,
+        toggleManualFields: toggleManualFields
+      };
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Household Digital Twin & Health Score - FixNow</title>
+  <meta name="description" content="Digitally track and maintain health, service history, and warranties for all your home appliances with AI-powered preventive maintenance insights.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo-wrapper" aria-label="FixNow Home">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-9.9 9.9a1 1 0 0 1-1.4 0l-1.6-1.6a1 1 0 0 1 0-1.4l9.9-9.9 1.4 0z"></path>
+            <path d="M19 3a3 3 0 0 0-3 3v.5"></path>
+          </svg>
+        </div>
+        <div class="logo-text">Fix<span>Now</span></div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="services.html" class="nav-link">Find Services</a></li>
+          <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="household.html" class="nav-link active">Household Health</a></li>
+          <li><a href="voice.html" class="nav-link">Voice Assistant</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="btnOpenAddAppliance" class="btn btn-primary btn-sm" onclick="window.FixNowHousehold.openAddModal()">
+          <span>+</span> Add Appliance
+        </button>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-links">
+        <li><a href="index.html" class="mobile-link"><span>🏠</span> Home</a></li>
+        <li><a href="services.html" class="mobile-link"><span>🔍</span> Find Services</a></li>
+        <li><a href="index.html#how-it-works" class="mobile-link"><span>⚙️</span> How It Works</a></li>
+        <li><a href="household.html" class="mobile-link"><span>🏡</span> Household Health</a></li>
+        <li><a href="voice.html" class="mobile-link"><span>🎙️</span> Voice Assistant</a></li>
+      </ul>
+      <div class="mobile-actions">
+        <button class="btn btn-primary" onclick="window.FixNowHousehold.openAddModal()">
+          + Add Appliance to Twin
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Breadcrumb / Hero Intro -->
+  <section style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border-color); padding: 28px 0;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="badge badge-category">Feature Innovation</span>
+            <span style="font-size: 0.88rem; color: var(--text-light); font-weight: 600;">Digital Home Asset Management</span>
+          </div>
+          <h1 style="font-size: 2rem; margin-bottom: 6px;">Household Digital Twin</h1>
+          <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 820px; line-height: 1.55;">
+            Maintain living digital records of your household appliances, plumbing, and electrical grid. Track installation age, previous repairs, and receive AI-driven preventive maintenance recommendations before issues escalate.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Body Content -->
+  <main class="section" style="padding-top: 32px;">
+    <div class="container">
+
+      <!-- 1. Household Health Score Banner -->
+      <section class="health-score-banner">
+        <!-- Radial Score Gauge -->
+        <div>
+          <div class="health-gauge-circle" id="healthGaugeCircle">
+            <div class="health-gauge-inner">
+              <div class="health-score-number" id="healthScoreValue">0</div>
+              <div class="health-score-label">Health Score</div>
+              <div style="font-size: 0.78rem; color: #10b981; font-weight: 700; margin-top: 2px;">out of 100</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Health Status Details & Category Progress Bars -->
+        <div class="health-score-details">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <span class="badge badge-status-good" style="font-size: 0.9rem;" id="healthScoreStatusBadge">● Overall Status: Pending Data</span>
+            <span style="color: #94a3b8; font-size: 0.85rem;" id="healthScoreAuditDate">Live Tracking</span>
+          </div>
+          <h2 id="healthScoreHeading">Household System Vitality: 0 / 100</h2>
+          <p id="healthScoreSummaryText">
+            No appliances registered in your Digital Twin yet. Register your home appliances to compute predictive health metrics.
+          </p>
+
+          <!-- System Health Breakdown Progress Bars -->
+          <div class="system-health-bars-grid" id="systemHealthBars">
+            <!-- Dynamically populated by js/household.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. AI Maintenance Recommendations Section -->
+      <section class="ai-insights-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+              <span class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 700;">AI Engine</span>
+              <h2 style="font-size: 1.5rem; margin: 0;">AI Maintenance Insights & Risk Analysis</h2>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+              Preventive maintenance recommendations based on equipment age, operating frequency, and regional seasonal loads.
+            </p>
+          </div>
+          <span style="font-size: 0.82rem; color: var(--text-light); font-style: italic;">
+            * Recommendations are preventive guidelines and not failure guarantees.
+          </span>
+        </div>
+
+        <div class="insights-grid" id="aiInsightsContainer">
+          <!-- Dynamically populated by js/household.js -->
+        </div>
+      </section>
+
+      <!-- 3. Household Digital Twin Appliance Records -->
+      <section style="margin-top: 48px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <h2 style="font-size: 1.6rem; margin-bottom: 4px;">Registered Appliances & Utility Systems</h2>
+            <p style="color: var(--text-muted); font-size: 0.98rem;">
+              Digital twin records for your home. View lifetime repair logs and parts replaced.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="window.FixNowHousehold.loadSampleAppliances();" title="Quickly populate realistic sample equipment">
+              <span>✨</span> Load Sample Equipment
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="window.FixNowHousehold.openAddModal();">
+              <span>+</span> Register New Appliance
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="window.FixNowHousehold.clearAllAppliances();" style="color: #b91c1c; border-color: #fca5a5;" title="Clear all equipment">
+              <span>🗑️</span> Clear All
+            </button>
+          </div>
+        </div>
+
+        <div class="appliances-grid" id="appliancesContainer">
+          <!-- Dynamically populated by js/household.js -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Add New Appliance Modal -->
+  <div class="modal-overlay" id="addApplianceModal" role="dialog" aria-modal="true" aria-labelledby="addApplianceTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="addApplianceTitle">Add Appliance to Digital Twin</h3>
+        <button class="modal-close-btn" id="btnCloseAddAppliance" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <form id="addApplianceForm">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="newApplianceType">System / Category</label>
+          <select id="newApplianceType" class="form-select" required>
+            <option value="AC">Air Conditioner (AC)</option>
+            <option value="Refrigerator">Refrigerator / Fridge</option>
+            <option value="Washing Machine">Washing Machine</option>
+            <option value="RO">RO Water Purifier</option>
+            <option value="TV">Smart TV / Electronics</option>
+            <option value="Electrical">Electrical Switchboard / Inverter</option>
+            <option value="Plumbing">Plumbing / Motor Pump</option>
+            <option value="Microwave">Microwave / Kitchen Appliance</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="newApplianceName">Custom Nickname / Location</label>
+          <input type="text" id="newApplianceName" class="form-control" placeholder="e.g. Master Bedroom Split AC" required>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="newApplianceBrand">Brand & Model</label>
+            <input type="text" id="newApplianceBrand" class="form-control" placeholder="e.g. Daikin 1.5T Inverter" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newApplianceDate">Installation / Purchase Date</label>
+            <input type="date" id="newApplianceDate" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="newApplianceLastServiceDate">Last Service Date (Optional)</label>
+            <input type="date" id="newApplianceLastServiceDate" class="form-control" title="Leave blank if brand new or never serviced">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newApplianceUsage">Operating Intensity</label>
+            <select id="newApplianceUsage" class="form-select">
+              <option value="medium" selected>Moderate (4–8 hrs/day, standard usage)</option>
+              <option value="high">Heavy (>8 hrs/day or daily heavy loads)</option>
+              <option value="low">Light (&lt;4 hrs/day, occasional use)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="newApplianceIssue">Current Operating Condition / Symptoms</label>
+            <select id="newApplianceIssue" class="form-select">
+              <option value="none" selected>None — Running Smoothly & Quietly</option>
+              <option value="noise_vibration">Unusual noise / humming / vibration</option>
+              <option value="cooling_heating_drop">Reduced cooling or heating output</option>
+              <option value="leakage">Water dripping or minor leakage</option>
+              <option value="power_fluctuation">High electricity bill / MCB tripping</option>
+              <option value="filter_clog">Filter choked / slow water filtration</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newApplianceRepairs">Total Past Repairs Logged</label>
+            <input type="number" id="newApplianceRepairs" class="form-control" value="0" min="0" max="25">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label" for="newApplianceNotes">Notes / Warranty Details</label>
+          <textarea id="newApplianceNotes" class="form-control" rows="2" placeholder="e.g. 5-year compressor warranty, purchased from local store..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+          Register in Digital Twin
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Global Booking Modal -->
+  <div class="modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="bookingModalTitle">Schedule Preventive Maintenance</h3>
+        <button class="modal-close-btn" id="closeBookingModal" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <!-- Booking Form -->
+      <form id="serviceBookingForm">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProviderName">Assigned Specialist</label>
+          <input type="text" id="bookingProviderName" class="form-control" value="Top Recommended Technician" readonly style="background-color: var(--bg-subtle);">
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingServiceCategory">Service Required</label>
+            <input type="text" id="bookingServiceCategory" class="form-control" value="Preventive Maintenance" readonly style="background-color: var(--bg-subtle);">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingDate">Preferred Date</label>
+            <input type="date" id="bookingDate" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingTimeSlot">Preferred Time Slot</label>
+          <select id="bookingTimeSlot" class="form-select">
+            <option value="Morning (9:00 AM - 12:00 PM)">Morning (9:00 AM - 12:00 PM)</option>
+            <option value="Afternoon (12:00 PM - 4:00 PM)">Afternoon (12:00 PM - 4:00 PM)</option>
+            <option value="Evening (4:00 PM - 8:00 PM)">Evening (4:00 PM - 8:00 PM)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProblemDesc">Maintenance Notes / Appliance History</label>
+          <textarea id="bookingProblemDesc" class="form-control" rows="2" style="height: auto; padding-top: 10px;"></textarea>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerName">Your Name</label>
+            <input type="text" id="bookingCustomerName" class="form-control" placeholder="Enter your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerPhone">Mobile Phone Number</label>
+            <input type="tel" id="bookingCustomerPhone" class="form-control" placeholder="10-digit mobile number" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingAddress">Village / Landmark Address</label>
+          <input type="text" id="bookingAddress" class="form-control" placeholder="e.g., Near Gram Panchayat, Rampur" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label" for="bookingImageUpload">Optional Photo of the Appliance / Nameplate</label>
+          <input type="file" id="bookingImageUpload" accept="image/*" class="form-control" style="padding-top: 8px;">
+          <div id="bookingImagePreview"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+          Confirm Service Request
+        </button>
+      </form>
+
+      <!-- Booking Success State -->
+      <div id="bookingSuccessState" class="booking-success-box">
+        <div class="success-icon-circle">✓</div>
+        <h3 style="color: var(--secondary); margin-bottom: 6px;">Service request sent successfully.</h3>
+        <p style="color: var(--text-muted); margin-bottom: 18px;">
+          Your preventive maintenance request has been dispatched to a verified technician.
+        </p>
+
+        <div id="successDetails" style="text-align: left; background: var(--bg-subtle); padding: 18px; border-radius: var(--radius-md); margin-bottom: 24px; font-size: 0.95rem; line-height: 1.7;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button class="btn btn-primary btn-sm" onclick="window.FixNow.closeBookingModal()">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+            <div style="width: 32px; height: 32px; background: #2563eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">FN</div>
+            <h3 style="margin: 0;">FixNow</h3>
+          </div>
+          <p>"Smart local help, made simple."</p>
+          <p style="font-size: 0.88rem; margin-top: 8px;">
+            AI-powered GPS local service finder with multilingual voice assistance for rural and low-literacy users.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Find Services</a></li>
+            <li><a href="household.html">Household Health</a></li>
+            <li><a href="voice.html">Voice Assistant</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Tracked Systems</h4>
+          <ul class="footer-links">
+            <li><a href="#app-1">Split Air Conditioners</a></li>
+            <li><a href="#app-2">Inverter Refrigerators</a></li>
+            <li><a href="#app-3">Washing Machines</a></li>
+            <li><a href="#app-4">Water Purifiers (RO)</a></li>
+            <li><a href="#app-6">Home Electrical Grid</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Maintenance</h4>
+          <ul class="footer-links">
+            <li><a href="#!">Preventive Scheduling</a></li>
+            <li><a href="#!">Health Score Formula</a></li>
+            <li><a href="#!">Warranty Reminders</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 FixNow. All rights reserved.</div>
+        <div class="footer-prototype-note">
+          College Project Frontend Prototype &bull; Backend ready for FastAPI, MongoDB Atlas & Scikit-learn
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/household.js"></script>
+</body>
+</html>

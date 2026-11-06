@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multilingual Voice Assistant - FixNow</title>
+  <meta name="description" content="Search local services by speaking in English, Telugu, or Tamil. Designed for rural and low-literacy users.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Voice Page Specific Ripple Effects */
+    .mic-ring {
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      right: -15px;
+      bottom: -15px;
+      border: 3px solid #3b82f6;
+      border-radius: 50%;
+      animation: ripple 2s infinite ease-out;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .mic-ring:nth-child(2) {
+      animation-delay: 0.6s;
+    }
+    .mic-ring:nth-child(3) {
+      animation-delay: 1.2s;
+    }
+    @keyframes ripple {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo-wrapper" aria-label="FixNow Home">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-9.9 9.9a1 1 0 0 1-1.4 0l-1.6-1.6a1 1 0 0 1 0-1.4l9.9-9.9 1.4 0z"></path>
+            <path d="M19 3a3 3 0 0 0-3 3v.5"></path>
+          </svg>
+        </div>
+        <div class="logo-text">Fix<span>Now</span></div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="services.html" class="nav-link">Find Services</a></li>
+          <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="household.html" class="nav-link">Household Health</a></li>
+          <li><a href="voice.html" class="nav-link active">Voice Assistant</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="services.html" class="btn btn-secondary btn-sm">Find Services</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-links">
+        <li><a href="index.html" class="mobile-link"><span>🏠</span> Home</a></li>
+        <li><a href="services.html" class="mobile-link"><span>🔍</span> Find Services</a></li>
+        <li><a href="index.html#how-it-works" class="mobile-link"><span>⚙️</span> How It Works</a></li>
+        <li><a href="household.html" class="mobile-link"><span>🏡</span> Household Health</a></li>
+        <li><a href="voice.html" class="mobile-link"><span>🎙️</span> Voice Assistant</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Voice Assistant Page Main Container -->
+  <main class="voice-assistant-wrap">
+    
+    <!-- Title & Rural Literacy Focus -->
+    <div class="text-center" style="margin-bottom: 24px;">
+      <span class="badge badge-verified" style="margin-bottom: 8px;">Accessible Voice AI</span>
+      <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Multilingual Voice Assistant</h1>
+      <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 680px; margin: 0 auto;">
+        No typing required. Speak naturally to find technicians, book services, or ask how to create an account, register as a customer or provider, and log in.
+      </p>
+    </div>
+
+    <!-- 1. Language Selector Pills -->
+    <div class="voice-language-picker" role="radiogroup" aria-label="Choose Voice Language">
+      <button class="lang-btn active" data-lang="english" role="radio" aria-checked="true">
+        English
+      </button>
+      <button class="lang-btn" data-lang="telugu" role="radio" aria-checked="false">
+        తెలుగు (Telugu)
+      </button>
+      <button class="lang-btn" data-lang="hindi" role="radio" aria-checked="false">
+        हिंदी (Hindi)
+      </button>
+      <button class="lang-btn" data-lang="tamil" role="radio" aria-checked="false">
+        தமிழ் (Tamil)
+      </button>
+    </div>
+
+    <!-- Active User Role Context Indicator -->
+    <div id="voiceRoleContextBar" style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+      <!-- Dynamically filled by voice.js based on FixNowAuth.getCurrentUser() -->
+    </div>
+
+    <!-- 2. Large Microphone UI & Pulse Animation -->
+    <div class="voice-mic-container">
+      <div class="mic-button-outer">
+        <div id="micPulseRings" style="display: none;">
+          <div class="mic-ring"></div>
+          <div class="mic-ring"></div>
+        </div>
+
+        <button class="mic-button" id="btnVoiceMic" title="Tap to start listening" aria-label="Tap to speak into microphone">
+          🎙️
+        </button>
+      </div>
+
+      <div class="mic-status-label" id="voiceStatusLabel">
+        Tap the microphone to speak
+      </div>
+      <div class="mic-status-sub">
+        Web Speech Recognition & Synthesis Active
+      </div>
+    </div>
+
+    <!-- 3. Conversational Feed (User speech bubbles & Assistant responses) -->
+    <div class="voice-conversation-feed" id="voiceConversationFeed" role="log" aria-live="polite">
+      <!-- Dynamically populated by js/voice.js -->
+    </div>
+
+    <!-- Accessible Type or Speak Input Bar -->
+    <div class="voice-text-input-wrap" style="display: flex; gap: 10px; margin-top: 14px; max-width: 640px; margin-left: auto; margin-right: auto; width: 100%;">
+      <input type="text" id="voiceTextInput" class="form-control" placeholder="Speak above or type your request (e.g., 'I need an electrician', 'Book the nearest one')..." style="flex: 1; border-radius: 9999px; padding: 12px 20px;">
+      <button class="btn btn-primary" id="btnVoiceSend" style="border-radius: 9999px; padding: 10px 22px; font-weight: 700;">Send</button>
+    </div>
+
+    <!-- 4. Sample Voice Prompts (Low literacy / quick click test) -->
+    <div class="voice-sample-prompts">
+      <h4>🗣️ Quick Voice Prompts (Tap to test):</h4>
+      <div class="prompt-chips-wrap" id="voicePromptChips">
+        <!-- Dynamically rendered based on active language -->
+      </div>
+    </div>
+
+    <!-- 5. Low-Literacy Help Notice -->
+    <div style="background-color: var(--bg-surface); border: 1px dashed var(--border-color); border-radius: var(--radius-md); padding: 18px; margin-top: 32px; display: flex; align-items: flex-start; gap: 14px;">
+      <span style="font-size: 1.5rem;">💡</span>
+      <div style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.5;">
+        <strong style="color: var(--secondary);">How speech recognition works in FixNow:</strong><br>
+        FixNow utilizes the browser's built-in Web Speech API (`SpeechRecognition`) for immediate voice-to-text and `SpeechSynthesis` for audio feedback. If microphone permissions are unavailable in your browser environment, simply tap any prompt chip above to simulate realistic voice recognition.
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Global Booking Modal -->
+  <div class="modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="bookingModalTitle">Book Service Provider</h3>
+        <button class="modal-close-btn" id="closeBookingModal" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <!-- Booking Form -->
+      <form id="serviceBookingForm">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProviderName">Selected Professional</label>
+          <input type="text" id="bookingProviderName" class="form-control" value="Service Specialist" readonly style="background-color: var(--bg-subtle);">
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingServiceCategory">Service Required</label>
+            <select id="bookingServiceCategory" class="form-select">
+              <option value="AC Repair">AC Repair & Servicing</option>
+              <option value="Plumber">Plumbing & Pipe Repair</option>
+              <option value="Electrician">Electrician & Wiring</option>
+              <option value="Mechanic">Bike / Auto Mechanic</option>
+              <option value="Refrigerator">Refrigerator Repair</option>
+              <option value="Washing Machine">Washing Machine</option>
+              <option value="RO Purifier">RO Water Purifier</option>
+              <option value="General Service">Other Home Service</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingDate">Preferred Date</label>
+            <input type="date" id="bookingDate" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingTimeSlot">Preferred Time Slot</label>
+          <select id="bookingTimeSlot" class="form-select">
+            <option value="Morning (9:00 AM - 12:00 PM)">Morning (9:00 AM - 12:00 PM)</option>
+            <option value="Afternoon (12:00 PM - 4:00 PM)">Afternoon (12:00 PM - 4:00 PM)</option>
+            <option value="Evening (4:00 PM - 8:00 PM)">Evening (4:00 PM - 8:00 PM)</option>
+            <option value="Urgent (As soon as possible)">🚨 Urgent (As soon as possible)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProblemDesc">Describe the Problem</label>
+          <textarea id="bookingProblemDesc" class="form-control" rows="2" placeholder="e.g., AC not cooling, strange rattling noise..." style="height: auto; padding-top: 10px;"></textarea>
+          <div class="quick-problem-chips">
+            <span class="chip-select">Not cooling</span>
+            <span class="chip-select">Water leakage</span>
+            <span class="chip-select">Strange noise</span>
+            <span class="chip-select">Power trip / Fuse</span>
+            <span class="chip-select">Routine cleaning</span>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerName">Your Name</label>
+            <input type="text" id="bookingCustomerName" class="form-control" placeholder="Enter your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerPhone">Mobile Phone Number</label>
+            <input type="tel" id="bookingCustomerPhone" class="form-control" placeholder="10-digit mobile number" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingAddress">Village / Street / House Landmark</label>
+          <input type="text" id="bookingAddress" class="form-control" placeholder="e.g., Near Gram Panchayat, Rampur" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label" for="bookingImageUpload">Optional Photo of the Appliance / Issue</label>
+          <input type="file" id="bookingImageUpload" accept="image/*" class="form-control" style="padding-top: 8px;">
+          <div id="bookingImagePreview"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+          Confirm Service Request
+        </button>
+      </form>
+
+      <!-- Booking Success State -->
+      <div id="bookingSuccessState" class="booking-success-box">
+        <div class="success-icon-circle">✓</div>
+        <h3 style="color: var(--secondary); margin-bottom: 6px;">Service request sent successfully.</h3>
+        <p style="color: var(--text-muted); margin-bottom: 18px;">
+          Your request has been dispatched to the local service professional.
+        </p>
+
+        <div id="successDetails" style="text-align: left; background: var(--bg-subtle); padding: 18px; border-radius: var(--radius-md); margin-bottom: 24px; font-size: 0.95rem; line-height: 1.7;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <a href="services.html" class="btn btn-secondary btn-sm">Find More Services</a>
+          <button class="btn btn-primary btn-sm" onclick="window.FixNow.closeBookingModal()">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+            <div style="width: 32px; height: 32px; background: #2563eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">FN</div>
+            <h3 style="margin: 0;">FixNow</h3>
+          </div>
+          <p>"Smart local help, made simple."</p>
+          <p style="font-size: 0.88rem; margin-top: 8px;">
+            AI-powered GPS local service finder with multilingual voice assistance for rural and low-literacy users.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Find Services</a></li>
+            <li><a href="household.html">Household Health</a></li>
+            <li><a href="voice.html">Voice Assistant</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Languages Supported</h4>
+          <ul class="footer-links">
+            <li><a href="#!" onclick="window.FixNowVoice.setLanguage('english');">English Voice Model</a></li>
+            <li><a href="#!" onclick="window.FixNowVoice.setLanguage('telugu');">తెలుగు వాయిస్ మోడల్</a></li>
+            <li><a href="#!" onclick="window.FixNowVoice.setLanguage('hindi');">हिंदी वॉयस मॉडल</a></li>
+            <li><a href="#!" onclick="window.FixNowVoice.setLanguage('tamil');">தமிழ் குரல் மாதிரி</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Accessibility</h4>
+          <ul class="footer-links">
+            <li><a href="#!">Low-Literacy Design</a></li>
+            <li><a href="#!">High Contrast Mode</a></li>
+            <li><a href="#!">Audio Feedback</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 FixNow. All rights reserved.</div>
+        <div class="footer-prototype-note">
+          College Project Frontend Prototype &bull; Backend ready for FastAPI, MongoDB Atlas & Scikit-learn
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/voice.js"></script>
+</body>
+</html>

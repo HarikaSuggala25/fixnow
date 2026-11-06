@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Provider Dashboard - FixNow</title>
+  <meta name="description" content="Manage service requests, schedule upcoming repairs, update rate card, and set availability on FixNow.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="background-color: #f8fafc;">
+
+  <!-- Top Navigation Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo-wrapper" aria-label="FixNow Home">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-9.9 9.9a1 1 0 0 1-1.4 0l-1.6-1.6a1 1 0 0 1 0-1.4l9.9-9.9 1.4 0z"></path>
+            <path d="M19 3a3 3 0 0 0-3 3v.5"></path>
+          </svg>
+        </div>
+        <div class="logo-text">Fix<span>Now</span> <small style="font-size: 0.8rem; background: #eff6ff; color: #1e40af; padding: 2px 8px; border-radius: 6px; margin-left: 6px;">Pro</small></div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="provider-dashboard.html" class="nav-link active">Dashboard</a></li>
+          <li><a href="services.html" class="nav-link">Live Marketplace</a></li>
+          <li><a href="index.html" class="nav-link">Customer Home</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions" id="providerNavActions" style="display: flex; align-items: center; gap: 10px;">
+        <button class="notif-bell-btn" id="headerNotifBell" onclick="window.FixNowNotifications.openNotificationsModal()" aria-label="View notifications" title="Notifications">
+          <span>🔔</span>
+          <span class="notif-badge-pill" id="notifBadgeCounter" style="display: none;">0</span>
+        </button>
+        <button class="user-auth-badge provider" id="headerProviderBadge" onclick="window.FixNowDashboard.showTab('profile')" title="Click to view & edit profile" style="cursor: pointer; border: 1px solid #bfdbfe;">
+          <span>🔧</span> <span id="headerProviderName">Provider Profile</span> ✏️
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="window.FixNowAuth.logout()">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Provider Dashboard Hero / Welcome Bar -->
+  <section class="dashboard-header-bar">
+    <div class="container">
+      <div class="dashboard-header-grid">
+        <div class="provider-welcome-info">
+          <img id="dashAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop&crop=faces" alt="Provider Avatar" class="dashboard-avatar">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h1 id="dashGreeting">Welcome, Provider</h1>
+              <span class="badge badge-verified" id="dashVerifiedBadge">✓ Verified Specialist</span>
+              <span class="badge badge-status-good" id="dashStatusBadge">● Available Today</span>
+            </div>
+            <p id="dashSubTitle">
+              Registered Service Professional &bull; Verified Rate Card
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <button class="btn btn-primary btn-sm" onclick="document.getElementById('tabNavAvailability').click()">
+            ⚡ Set Live Availability
+          </button>
+        </div>
+      </div>
+
+      <!-- Today's Overview KPI Cards -->
+      <div class="overview-kpis-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap" style="background: #eff6ff; color: #2563eb;">📥</div>
+          <div>
+            <div class="kpi-val" id="kpiNewRequests">2</div>
+            <div class="kpi-lbl">New Requests</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap" style="background: #fefce8; color: #b45309;">⏳</div>
+          <div>
+            <div class="kpi-val" id="kpiPendingRequests">1</div>
+            <div class="kpi-lbl">Pending Requests</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap" style="background: #f0fdf4; color: #15803d;">✅</div>
+          <div>
+            <div class="kpi-val" id="kpiApprovedBookings">3</div>
+            <div class="kpi-lbl">Approved Bookings</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap" style="background: #f8fafc; color: #475569;">🏆</div>
+          <div>
+            <div class="kpi-val" id="kpiCompletedServices">142</div>
+            <div class="kpi-lbl">Completed Services</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap" style="background: #fff7ed; color: #f59e0b;">⭐</div>
+          <div>
+            <div class="kpi-val" id="kpiAverageRating">4.9</div>
+            <div class="kpi-lbl">Average Rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard Main Workspace -->
+  <main class="container" style="padding-top: 10px; padding-bottom: 60px;">
+
+    <!-- Dashboard Navigation Tabs -->
+    <div class="dashboard-nav-tabs" role="tablist">
+      <button class="dash-tab-btn active" id="tabNavRequests" onclick="window.FixNowDashboard.showTab('requests')">
+        📥 Service Requests (<span id="tabCountRequests">3</span>)
+      </button>
+      <button class="dash-tab-btn" id="tabNavUpcoming" onclick="window.FixNowDashboard.showTab('upcoming')">
+        📅 Upcoming Bookings
+      </button>
+      <button class="dash-tab-btn" id="tabNavServices" onclick="window.FixNowDashboard.showTab('services')">
+        📋 My Services & Pricing
+      </button>
+      <button class="dash-tab-btn" id="tabNavAvailability" onclick="window.FixNowDashboard.showTab('availability')">
+        ⏱️ Availability & Hours
+      </button>
+      <button class="dash-tab-btn" id="tabNavReviews" onclick="window.FixNowDashboard.showTab('reviews')">
+        ⭐ Customer Reviews
+      </button>
+      <button class="dash-tab-btn" id="tabNavProfile" onclick="window.FixNowDashboard.showTab('profile')">
+        👤 My Profile
+      </button>
+    </div>
+
+    <!-- TAB 1: Service Requests -->
+    <section id="tabContentRequests">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <h2 style="font-size: 1.4rem; margin-bottom: 4px;">Incoming Service Requests</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Local clients who booked your beauty, skincare, and bridal grooming services.
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary btn-sm" onclick="window.FixNowDashboard.loadRequests()">🔄 Refresh Requests</button>
+        </div>
+      </div>
+
+      <div class="requests-list" id="providerRequestsContainer">
+        <!-- Dynamically rendered by providerDashboard.js -->
+      </div>
+    </section>
+
+    <!-- TAB 2: Upcoming Bookings -->
+    <section id="tabContentUpcoming" style="display: none;">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.4rem; margin-bottom: 4px;">Upcoming Confirmed Bookings</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Confirmed beauty appointments and salon sessions scheduled at client doorstep.
+        </p>
+      </div>
+
+      <div class="requests-list" id="providerUpcomingContainer">
+        <!-- Dynamically rendered by providerDashboard.js -->
+      </div>
+    </section>
+
+    <!-- TAB 3: My Services & Pricing -->
+    <section id="tabContentServices" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <h2 style="font-size: 1.4rem; margin-bottom: 4px;">My Services & Transparent Rate Card</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Customers see these prices when booking. Clear prices build trust with rural users.
+          </p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="window.FixNowDashboard.openAddServiceModal()">+ Add New Service</button>
+      </div>
+
+      <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm);">
+        <div id="providerRateCardList">
+          <!-- Dynamically rendered -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Availability & Working Hours -->
+    <section id="tabContentAvailability" style="display: none;">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.4rem; margin-bottom: 4px;">Availability & Working Hours</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Control when your profile appears in local GPS search results.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
+          <h3 style="margin-bottom: 16px;">Current Availability Status</h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">
+            Set whether you are ready to receive service calls right now.
+          </p>
+
+          <div class="availability-pill-group">
+            <button class="avail-pill-btn active-available" id="btnAvailAvailable" onclick="window.FixNowDashboard.setAvailability('available')">
+              🟢 Available Today
+            </button>
+            <button class="avail-pill-btn" id="btnAvailBusy" onclick="window.FixNowDashboard.setAvailability('busy')">
+              🟡 Busy on Site
+            </button>
+            <button class="avail-pill-btn" id="btnAvailUnavailable" onclick="window.FixNowDashboard.setAvailability('unavailable')">
+              🔴 Unavailable / Off Duty
+            </button>
+          </div>
+
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600;">
+              <input type="checkbox" id="checkEmergencyCallouts" checked onchange="window.FixNow.showToast('Appointment settings updated.', 'info')">
+              <span>Accept urgent / same-day appointments (e.g., last-minute bridal touchup, event styling)</span>
+            </label>
+          </div>
+        </div>
+
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
+          <h3 style="margin-bottom: 16px;">Daily Working Hours</h3>
+          <form id="workingHoursForm" onsubmit="window.FixNowDashboard.saveWorkingHours(event)">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label" for="workingHoursInput">Operating Hours</label>
+              <input type="text" id="workingHoursInput" class="form-control" value="9:00 AM - 7:00 PM (Tue - Sun)">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" for="travelRadiusInput">Maximum Travel Radius (km)</label>
+              <input type="number" id="travelRadiusInput" class="form-control" value="10" min="1" max="50">
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Save Hours & Radius</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: Customer Reviews -->
+    <section id="tabContentReviews" style="display: none;">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.4rem; margin-bottom: 4px;">Customer Feedback & Ratings</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Verified feedback left by clients after completed doorstep beauty services.
+        </p>
+      </div>
+
+      <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);">
+        <div class="reviews-list" id="dashReviewsContainer">
+          <!-- Dynamically rendered -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: My Profile -->
+    <section id="tabContentProfile" style="display: none;">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.4rem; margin-bottom: 4px;">Edit Provider Profile</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Update your public profile details seen by local clients and customers.
+        </p>
+      </div>
+
+      <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm); max-width: 760px;">
+        <form id="providerProfileForm" onsubmit="window.FixNowDashboard.saveProfile(event)">
+          <div class="form-grid-2" style="margin-bottom: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="profName">Full Name</label>
+              <input type="text" id="profName" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profMobile">Contact Mobile Number</label>
+              <input type="tel" id="profMobile" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2" style="margin-bottom: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="profCategory">Service Category</label>
+              <select id="profCategory" class="form-select">
+                <option value="beautician" selected>Beautician / Salon</option>
+                <option value="ac-repair">AC Repair</option>
+                <option value="plumber">Plumber</option>
+                <option value="electrician">Electrician</option>
+                <option value="mechanic">Mechanic</option>
+                <option value="refrigerator">Refrigerator Repair</option>
+                <option value="washing-machine">Washing Machine</option>
+                <option value="ro-water">RO / Water Purifier</option>
+                <option value="tv-repair">TV Repair</option>
+                <option value="carpenter">Carpenter</option>
+                <option value="painter">Painter</option>
+                <option value="labourer">Labourer</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profExp">Years of Experience</label>
+              <input type="number" id="profExp" class="form-control" min="0" max="50" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" for="profLocation" style="margin: 0;">Location & Service Area</label>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnDetectProvProfGps" onclick="window.FixNowDashboard.detectWorkshopLocation()" style="padding: 2px 8px; font-size: 0.78rem;">
+                📍 Detect Workshop GPS
+              </button>
+            </div>
+            <input type="text" id="profLocation" class="form-control" required placeholder="e.g. Rampur Main Road or GPS Address">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="profDesc">Profile Description / Bio</label>
+            <textarea id="profDesc" class="form-control" rows="3" required></textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label class="form-label" for="profAvatar">Avatar Photo URL</label>
+            <input type="url" id="profAvatar" class="form-control">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg">
+            Save Profile Changes
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Add / Edit Service Modal -->
+  <div id="modalAddService" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.65); backdrop-filter: blur(4px); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
+    <div style="background: white; border-radius: 16px; padding: 28px; max-width: 480px; width: 100%; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+        <h3 id="modalServiceHeading" style="margin: 0; font-size: 1.25rem; color: var(--secondary);">+ Add New Service</h3>
+        <button type="button" onclick="window.FixNowDashboard.closeAddServiceModal()" style="background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+      </div>
+      <form id="formAddService" onsubmit="window.FixNowDashboard.handleSaveNewService(event)">
+        <input type="hidden" id="editServiceIndex" value="-1">
+        <!-- Quick Service Suggestions (Sets title only, price is manually set by provider) -->
+        <div style="margin-bottom: 14px; background: var(--bg-subtle); border-radius: 8px; padding: 10px 12px; border: 1px solid var(--border-color);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--secondary); margin-bottom: 6px;">
+            💡 Quick Service Suggestions (Click to fill name, then manually enter your price):
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            <button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;" onclick="window.FixNowDashboard.setSuggestedService('Facial &amp; Skin Care')">Facial &amp; Skin Care</button>
+            <button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;" onclick="window.FixNowDashboard.setSuggestedService('Haircut &amp; Hair Styling')">Haircut &amp; Styling</button>
+            <button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;" onclick="window.FixNowDashboard.setSuggestedService('Bridal Makeup')">Bridal Makeup</button>
+            <button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;" onclick="window.FixNowDashboard.setSuggestedService('Manicure &amp; Pedicure')">Manicure &amp; Pedicure</button>
+            <button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;" onclick="window.FixNowDashboard.setSuggestedService('Hair Spa Treatment')">Hair Spa</button>
+            <button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;" onclick="window.FixNowDashboard.setSuggestedService('Eyebrow Threading')">Threading</button>
+            <button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;" onclick="window.FixNowDashboard.setSuggestedService('Saree Draping')">Saree Draping</button>
+            <button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;" onclick="window.FixNowDashboard.setSuggestedService('Party Makeup')">Party Makeup</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="inputServiceName">Service Name *</label>
+          <input type="text" id="inputServiceName" class="form-control" placeholder="e.g. Keratin Hair Treatment" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="inputServicePrice">Price in Indian Rupees (₹) *</label>
+          <input type="text" id="inputServicePrice" class="form-control" placeholder="Enter your price (e.g. ₹499 or 499)" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 22px;">
+          <label class="form-label" for="inputServiceDesc">Optional Service Description</label>
+          <textarea id="inputServiceDesc" class="form-control" rows="2" placeholder="e.g. Deep protein conditioning with revitalizing head massage..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="window.FixNowDashboard.closeAddServiceModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveService">Save Service</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Auth Restriction Notice (Shown if user visits while not logged in as Provider) -->
+  <div id="authGuardOverlay" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.85); backdrop-filter: blur(5px); z-index: 9999; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: white; border-radius: var(--radius-lg); padding: 36px; max-width: 480px; width: 100%; text-align: center; box-shadow: var(--shadow-lg);">
+      <div style="font-size: 3.5rem; margin-bottom: 12px;">🔒</div>
+      <h2 style="color: var(--secondary); margin-bottom: 10px;">Service Provider Access Required</h2>
+      <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 24px; line-height: 1.5;">
+        This dashboard is restricted to verified service providers. Please log in with your registered mobile number and password, or create a new provider account.
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <a href="auth.html?role=provider" class="btn btn-primary btn-lg">
+          🔑 Provider Login
+        </a>
+        <a href="auth.html?role=provider&mode=signup" class="btn btn-secondary">
+          ✨ New Provider Registration
+        </a>
+        <a href="index.html" class="btn btn-text" style="color: var(--text-muted);">
+          Return to Customer Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 FixNow. All rights reserved.</div>
+        <div class="footer-prototype-note">
+          Service Provider Operations Portal &bull; Real-time Local Bookings Management
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/providerDashboard.js"></script>
+</body>
+</html>

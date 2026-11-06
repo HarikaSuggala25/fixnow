@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FixNow - Local Service Finder & Smart Maintenance</title>
+  <meta name="description" content="Find trusted local service providers near you with simple search, multilingual voice assistance, and smart household maintenance for rural and low-literacy users.">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231e40af'><path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-9.9 9.9a1 1 0 0 1-1.4 0l-1.6-1.6a1 1 0 0 1 0-1.4l9.9-9.9 1.4 0zm5.6-2.6a3 3 0 0 0-4.2 0l-1.4 1.4 4.2 4.2 1.4-1.4a3 3 0 0 0 0-4.2z'/></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo-wrapper" aria-label="FixNow Home">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-9.9 9.9a1 1 0 0 1-1.4 0l-1.6-1.6a1 1 0 0 1 0-1.4l9.9-9.9 1.4 0z"></path>
+            <path d="M19 3a3 3 0 0 0-3 3v.5"></path>
+          </svg>
+        </div>
+        <div class="logo-text">Fix<span>Now</span></div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="services.html" class="nav-link">Find Services</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="household.html" class="nav-link">Household Health</a></li>
+          <li><a href="voice.html" class="nav-link">Voice Assistant</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="services.html" class="btn btn-secondary btn-sm">Find a Service</a>
+        <a href="voice.html" class="btn btn-voice btn-sm">
+          <span>🎙️</span> Use Voice Assistant
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-links">
+        <li><a href="index.html" class="mobile-link"><span>🏠</span> Home</a></li>
+        <li><a href="services.html" class="mobile-link"><span>🔍</span> Find Services</a></li>
+        <li><a href="#how-it-works" class="mobile-link"><span>⚙️</span> How It Works</a></li>
+        <li><a href="household.html" class="mobile-link"><span>🏡</span> Household Health</a></li>
+        <li><a href="voice.html" class="mobile-link"><span>🎙️</span> Voice Assistant</a></li>
+      </ul>
+      <div class="mobile-actions">
+        <a href="services.html" class="btn btn-primary" style="width: 100%;">Find a Service</a>
+        <a href="voice.html" class="btn btn-voice" style="width: 100%;">Use Voice Assistant</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span>📍</span> GPS-Based Local Discovery &bull; Multilingual Voice
+        </div>
+        <h1>Find the right help.<br>Right when you need it.</h1>
+        <p class="hero-subtitle">
+          Find trusted local service providers near you with simple search, voice assistance, and smart household maintenance.
+        </p>
+
+        <div class="hero-actions">
+          <a href="services.html" class="btn btn-primary btn-lg">
+            <span>🔍</span> Find a Service
+          </a>
+          <a href="voice.html" class="btn btn-voice btn-lg">
+            <span>🎙️</span> Use Voice Assistant
+          </a>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; margin-top: 10px; font-size: 0.95rem; color: var(--text-light);">
+          <span>🗣️ Available in:</span>
+          <strong style="color: var(--secondary);">English</strong> &bull;
+          <strong style="color: var(--secondary);">తెలుగు</strong> &bull;
+          <strong style="color: var(--secondary);">தமிழ்</strong>
+        </div>
+      </div>
+
+      <!-- Hero Visual / Location Concept -->
+      <div class="hero-visual">
+        <div class="hero-radar-card">
+          <div class="radar-header">
+            <div>
+              <span style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); font-weight: 700;">Live Local Radar</span>
+              <h4 style="margin: 0; font-size: 1.15rem; color: var(--secondary);">Nearby Service Cluster</h4>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #15803d; font-weight: 700;">
+              <span class="radar-pulse-dot"></span> GPS Active
+            </div>
+          </div>
+
+          <div class="radar-map-sim">
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+
+            <!-- Center User Pin -->
+            <div class="radar-pin-user" title="You are here (Secunderabad - Rampur Cluster)">
+              📍
+            </div>
+
+            <!-- Nearby Service Clusters -->
+            <a href="services.html?category=ac-repair" class="radar-pin" style="top: 24px; left: 32px;" title="AC Repair Services">
+              <span>❄️</span> AC Repair (2.4 km)
+            </a>
+            <a href="services.html?category=plumber" class="radar-pin" style="bottom: 30px; left: 45px;" title="Plumber Services">
+              <span>🚰</span> Plumber (1.8 km)
+            </a>
+            <a href="services.html?category=electrician" class="radar-pin" style="top: 35px; right: 28px;" title="Electrician Services">
+              <span>⚡</span> Electrician (2.1 km)
+            </a>
+            <a href="services.html?category=mechanic" class="radar-pin" style="bottom: 22px; right: 35px;" title="Mechanic Services">
+              <span>🔧</span> Mechanic (3.2 km)
+            </a>
+          </div>
+
+          <div class="radar-footer-stats">
+            <div class="radar-stat-box">
+              <div class="radar-stat-val">120+</div>
+              <div class="radar-stat-lbl">Verified Pros</div>
+            </div>
+            <div class="radar-stat-box">
+              <div class="radar-stat-val">&lt; 3.0 km</div>
+              <div class="radar-stat-lbl">Avg Distance</div>
+            </div>
+            <div class="radar-stat-box">
+              <div class="radar-stat-val">15 min</div>
+              <div class="radar-stat-lbl">Response Time</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust / Feature Information Bar -->
+  <section class="trust-bar">
+    <div class="container trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon-box">📍</div>
+        <div class="trust-text">
+          <h4>GPS-Based Proximity</h4>
+          <p>Find professionals working within your immediate village or ward.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon-box">🎙️</div>
+        <div class="trust-text">
+          <h4>Multilingual Voice</h4>
+          <p>Low digital literacy friendly. Speak in English, Telugu, or Tamil.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon-box">✅</div>
+        <div class="trust-text">
+          <h4>Verified Providers</h4>
+          <p>Identity verified with real customer ratings, photos, and videos.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon-box">🏡</div>
+        <div class="trust-text">
+          <h4>Household Health</h4>
+          <p>Digital twin for home appliances with AI preventive maintenance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Categories Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="badge badge-category" style="margin-bottom: 8px;">Explore Services</span>
+        <h2 class="section-title">Popular Service Categories</h2>
+        <p class="section-subtitle">
+          Tap any service to find verified technicians ready to help at your doorstep today.
+        </p>
+      </div>
+
+      <div class="categories-grid" id="homeCategoriesGrid">
+        <!-- 1. Mechanic -->
+        <a href="services.html?category=mechanic" class="category-card">
+          <div class="category-icon-box">🔧</div>
+          <h3 class="category-title">Mechanic</h3>
+          <p class="category-desc">Bike & auto repair, roadside puncture, carburettor & engine tuning.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 2. AC Repair -->
+        <a href="services.html?category=ac-repair" class="category-card">
+          <div class="category-icon-box">❄️</div>
+          <h3 class="category-title">AC Repair</h3>
+          <p class="category-desc">Jet foam cleaning, gas top-up, capacitor check & split AC installation.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3. Electrician -->
+        <a href="services.html?category=electrician" class="category-card">
+          <div class="category-icon-box">⚡</div>
+          <h3 class="category-title">Electrician</h3>
+          <p class="category-desc">Short-circuit troubleshooting, fan fitting, inverter wiring & MCBs.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 4. Plumber -->
+        <a href="services.html?category=plumber" class="category-card">
+          <div class="category-icon-box">🚰</div>
+          <h3 class="category-title">Plumber</h3>
+          <p class="category-desc">Tap leakage, pipe blockage, booster pump repairs & Sintex tank cleaning.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 5. Refrigerator Repair -->
+        <a href="services.html?category=refrigerator" class="category-card">
+          <div class="category-icon-box">🧊</div>
+          <h3 class="category-title">Refrigerator Repair</h3>
+          <p class="category-desc">Cooling coils, compressor relay, gas charging & defrost timers.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 6. Washing Machine Repair -->
+        <a href="services.html?category=washing-machine" class="category-card">
+          <div class="category-icon-box">🧺</div>
+          <h3 class="category-title">Washing Machine</h3>
+          <p class="category-desc">Motor belt, heavy drum vibration, drain pump errors & PCB boards.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 7. TV Repair -->
+        <a href="services.html?category=tv-repair" class="category-card">
+          <div class="category-icon-box">📺</div>
+          <h3 class="category-title">TV Repair</h3>
+          <p class="category-desc">LED screen backlight, audio diagnosis, power board & wall mounting.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 8. RO / Water Purifier -->
+        <a href="services.html?category=ro-water" class="category-card">
+          <div class="category-icon-box">💧</div>
+          <h3 class="category-title">RO / Water Purifier</h3>
+          <p class="category-desc">Sediment & carbon filter replacement, membrane renewal & TDS test.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 9. Carpenter -->
+        <a href="services.html?category=carpenter" class="category-card">
+          <div class="category-icon-box">🪚</div>
+          <h3 class="category-title">Carpenter</h3>
+          <p class="category-desc">Door planing, Godrej lock fitting, wardrobe repairs & wooden furniture.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 10. Painter -->
+        <a href="services.html?category=painter" class="category-card">
+          <div class="category-icon-box">🎨</div>
+          <h3 class="category-title">Painter</h3>
+          <p class="category-desc">Interior emulsion, exterior weather coats, terrace waterproofing.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 11. Labourer -->
+        <a href="services.html?category=labourer" class="category-card">
+          <div class="category-icon-box">👷</div>
+          <h3 class="category-title">Labourer</h3>
+          <p class="category-desc">Heavy lifting, farm harvest help, house shifting & grain bag loading.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+
+        <!-- 12. Beautician / Salon -->
+        <a href="services.html?category=beautician" class="category-card">
+          <div class="category-icon-box">✂️</div>
+          <h3 class="category-title">Beautician / Salon</h3>
+          <p class="category-desc">Safe doorstep grooming, herbal facials, bridal mehendi & haircuts.</p>
+          <div class="category-footer">
+            <span>Find Specialists</span>
+            <span>&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="section section-alt" id="how-it-works">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="badge badge-category" style="margin-bottom: 8px;">Simple Process</span>
+        <h2 class="section-title">How FixNow Works</h2>
+        <p class="section-subtitle">
+          Designed for simplicity. No complex registrations, no hidden fees.
+        </p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num-pill">1</div>
+          <div class="step-icon-wrap">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </div>
+          <h3 class="step-title">Tell us what you need</h3>
+          <p class="step-desc">
+            Type your problem or simply tap the microphone and speak in English, Telugu, or Tamil.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num-pill">2</div>
+          <div class="step-icon-wrap">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+              <line x1="9" y1="3" x2="9" y2="18"></line>
+              <line x1="15" y1="6" x2="15" y2="21"></line>
+            </svg>
+          </div>
+          <h3 class="step-title">Find nearby providers</h3>
+          <p class="step-desc">
+            FixNow uses GPS to match you with verified professionals located within 2-5 kilometers.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num-pill">3</div>
+          <div class="step-icon-wrap">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="step-title">Choose a trusted pro</h3>
+          <p class="step-desc">
+            Review transparent star ratings, years of field experience, and real customer job photos and videos.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num-pill">4</div>
+          <div class="step-icon-wrap">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h3 class="step-title">Book and review</h3>
+          <p class="step-desc">
+            Confirm your booking with one tap. The technician calls you, completes the work, and you pay directly.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Voice Assistant Callout Banner -->
+  <section class="container">
+    <div class="voice-callout-banner">
+      <div>
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: white; margin-bottom: 8px;">Low-Literacy Friendly</span>
+        <h2>Can't type? Just speak to FixNow.</h2>
+        <p>Our voice assistant understands your local language and instantly finds the right technician.</p>
+        <div class="lang-capsules">
+          <span class="lang-pill">English</span>
+          <span class="lang-pill">తెలుగు (Telugu)</span>
+          <span class="lang-pill">தமிழ் (Tamil)</span>
+        </div>
+      </div>
+      <div>
+        <a href="voice.html" class="btn btn-secondary btn-lg" style="background: white; color: #1e40af; border: none; font-weight: 700;">
+          <span>🎙️</span> Open Voice Assistant
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Household Health Spotlight Banner -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div style="background: white; border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 40px; box-shadow: var(--shadow-md); display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center;">
+        <div>
+          <span class="badge badge-verified" style="margin-bottom: 8px;">Smart Prevention</span>
+          <h2 style="font-size: 1.8rem; margin-bottom: 10px;">Household Digital Twin & Health Score</h2>
+          <p id="homeTwinSummary" style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.55;">
+            Keep living digital records of your AC, refrigerator, washing machine, and electrical systems. FixNow computes predictive health metrics and delivers AI preventive maintenance advisories to prevent unexpected breakdowns.
+          </p>
+        </div>
+        <div>
+          <a href="household.html" class="btn btn-primary btn-lg" style="white-space: nowrap;">
+            <span>🏡</span> View Digital Twin
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About the AI Section -->
+  <section class="section" style="background-color: #0f172a; color: white;">
+    <div class="container">
+      <div class="ai-overview-card" style="padding: 0; background: none; box-shadow: none;">
+        <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; margin-bottom: 10px;">Artificial Intelligence</span>
+        <h2>Smart assistance for everyday household needs.</h2>
+        <p class="lead">
+          FixNow combines location intelligence, natural language speech processing, and preventive maintenance risk analysis to bridge the digital divide for rural and semi-urban communities.
+        </p>
+
+        <div class="ai-pillars-grid">
+          <div class="ai-pillar-item">
+            <div class="ai-pillar-icon">📍</div>
+            <h4>GPS-Based Discovery</h4>
+            <p>Automatically calculates road distance and pinpoints closest active service specialists within your village cluster.</p>
+          </div>
+
+          <div class="ai-pillar-item">
+            <div class="ai-pillar-icon">🎙️</div>
+            <h4>Multilingual Voice</h4>
+            <p>Speech recognition and synthesis in English, Telugu, and Tamil allows users to search without reading or typing complex menus.</p>
+          </div>
+
+          <div class="ai-pillar-item">
+            <div class="ai-pillar-icon">⭐</div>
+            <h4>Provider Matching</h4>
+            <p>Intelligent ranking evaluates verified credentials, proximity, on-time history, and community trust metrics.</p>
+          </div>
+
+          <div class="ai-pillar-item">
+            <div class="ai-pillar-icon">📋</div>
+            <h4>Household Maintenance Twin</h4>
+            <p>Maintains lifetime service records, replaced parts, and age tracking for all home appliances and water/electrical lines.</p>
+          </div>
+
+          <div class="ai-pillar-item">
+            <div class="ai-pillar-icon">🛡️</div>
+            <h4>Maintenance-Risk Insights</h4>
+            <p>Evaluates age and service intervals to offer preventive maintenance recommendations before peak seasons.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Booking Modal -->
+  <div class="modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="bookingModalTitle">Book Service Provider</h3>
+        <button class="modal-close-btn" id="closeBookingModal" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <!-- Booking Form -->
+      <form id="serviceBookingForm">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProviderName">Selected Professional</label>
+          <input type="text" id="bookingProviderName" class="form-control" placeholder="Select a technician from Services" readonly style="background-color: var(--bg-subtle);">
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingServiceCategory">Main Service</label>
+            <select id="bookingServiceCategory" class="form-select">
+              <option value="Beautician">Beautician / Doorstep Salon</option>
+              <option value="AC Repair">AC Repair & Servicing</option>
+              <option value="Plumber">Plumbing & Pipe Repair</option>
+              <option value="Electrician">Electrician & Wiring</option>
+              <option value="Mechanic">Bike / Auto Mechanic</option>
+              <option value="Refrigerator">Refrigerator Repair</option>
+              <option value="Washing Machine">Washing Machine</option>
+              <option value="RO Purifier">RO Water Purifier</option>
+              <option value="Painter">House Painting & Waterproofing</option>
+              <option value="Carpenter">Carpentry & Furniture</option>
+              <option value="General Service">Other Home Service</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingSubService">Sub-Service / Specific Job</label>
+            <select id="bookingSubService" class="form-select">
+              <option value="Hair Wash">Hair Wash</option>
+              <option value="Herbal Glow Facial">Herbal Glow Facial</option>
+              <option value="Haircut & Deep Conditioning">Haircut & Deep Conditioning</option>
+              <option value="Bridal Mehendi & Makeup">Bridal Mehendi & Makeup</option>
+              <option value="Threading & Organic Waxing">Threading & Organic Waxing</option>
+              <option value="General Inspection">General Inspection / Repair</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingDate">Preferred Date</label>
+            <input type="date" id="bookingDate" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingTimeSlot">Preferred Time Slot</label>
+            <select id="bookingTimeSlot" class="form-select">
+              <option value="Morning (9:00 AM - 12:00 PM)">Morning (9:00 AM - 12:00 PM)</option>
+              <option value="Afternoon (12:00 PM - 4:00 PM)">Afternoon (12:00 PM - 4:00 PM)</option>
+              <option value="Evening (4:00 PM - 8:00 PM)">Evening (4:00 PM - 8:00 PM)</option>
+              <option value="Urgent (As soon as possible)">🚨 Urgent (As soon as possible)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingProblemDesc">Describe the Problem</label>
+          <textarea id="bookingProblemDesc" class="form-control" rows="2" placeholder="e.g., AC not cooling, strange rattling noise..." style="height: auto; padding-top: 10px;"></textarea>
+          <div class="quick-problem-chips">
+            <span class="chip-select">Not cooling</span>
+            <span class="chip-select">Water leakage</span>
+            <span class="chip-select">Strange noise</span>
+            <span class="chip-select">Power trip / Fuse</span>
+            <span class="chip-select">Routine cleaning</span>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-bottom: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerName">Your Name</label>
+            <input type="text" id="bookingCustomerName" class="form-control" placeholder="Enter your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookingCustomerPhone">Mobile Phone Number</label>
+            <input type="tel" id="bookingCustomerPhone" class="form-control" placeholder="10-digit mobile number" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="bookingAddress">Village / Street / House Landmark</label>
+          <input type="text" id="bookingAddress" class="form-control" placeholder="e.g., Near Gram Panchayat, Rampur" required>
+        </div>
+
+        <!-- Optional Image Upload -->
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label" for="bookingImageUpload">Optional Photo of the Appliance / Issue</label>
+          <input type="file" id="bookingImageUpload" accept="image/*" class="form-control" style="padding-top: 8px;">
+          <div id="bookingImagePreview"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+          Confirm Service Request
+        </button>
+      </form>
+
+      <!-- Booking Success State -->
+      <div id="bookingSuccessState" class="booking-success-box">
+        <div class="success-icon-circle">✓</div>
+        <h3 style="color: var(--secondary); margin-bottom: 6px;">Service request sent successfully.</h3>
+        <p style="color: var(--text-muted); margin-bottom: 18px;">
+          Your request has been dispatched to the local service professional.
+        </p>
+
+        <div id="successDetails" style="text-align: left; background: var(--bg-subtle); padding: 18px; border-radius: var(--radius-md); margin-bottom: 24px; font-size: 0.95rem; line-height: 1.7;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <a href="services.html" class="btn btn-secondary btn-sm">Find More Services</a>
+          <button class="btn btn-primary btn-sm" onclick="window.FixNow.closeBookingModal()">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+            <div style="width: 32px; height: 32px; background: #2563eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">FN</div>
+            <h3 style="margin: 0;">FixNow</h3>
+          </div>
+          <p>"Smart local help, made simple."</p>
+          <p style="font-size: 0.88rem; margin-top: 8px;">
+            AI-powered GPS local service finder with multilingual voice assistance for rural and low-literacy users.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Find Services</a></li>
+            <li><a href="household.html">Household Health</a></li>
+            <li><a href="voice.html">Voice Assistant</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Top Categories</h4>
+          <ul class="footer-links">
+            <li><a href="services.html?category=ac-repair">AC Repair</a></li>
+            <li><a href="services.html?category=electrician">Electrician</a></li>
+            <li><a href="services.html?category=plumber">Plumber</a></li>
+            <li><a href="services.html?category=mechanic">Mechanic</a></li>
+            <li><a href="services.html?category=refrigerator">Refrigerator</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Languages Supported</h4>
+          <ul class="footer-links">
+            <li><a href="voice.html">English</a></li>
+            <li><a href="voice.html">తెలుగు (Telugu)</a></li>
+            <li><a href="voice.html">தமிழ் (Tamil)</a></li>
+            <li><a href="voice.html">Voice Command Guide</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 FixNow. All rights reserved.</div>
+        <div class="footer-prototype-note">
+          College Project Frontend Prototype &bull; Backend ready for FastAPI, MongoDB Atlas & Scikit-learn
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Sync live Household Digital Twin vitality on home page
+    (function () {
+      try {
+        const saved = localStorage.getItem('fixnow_household_data');
+        if (saved) {
+          const data = JSON.parse(saved);
+          const p = document.getElementById('homeTwinSummary');
+          if (p && data && Array.isArray(data.appliances) && data.appliances.length > 0) {
+            p.innerHTML = `Keep living digital records of your AC, refrigerator, washing machine, and electrical systems. FixNow is currently monitoring your household vitality at <strong style="color: #15803d;">${data.overallHealthScore || 82}/100</strong> across ${data.appliances.length} asset(s).`;
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>
