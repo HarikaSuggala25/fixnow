@@ -629,3 +629,20 @@ def send_chat_message(request_id: str, payload: ChatMessageModel):
         MEMORY_DB["chat_messages"].append(new_msg)
 
     return {"success": True, "message": new_msg}
+
+# ---------------------------------------------------------------------------
+# 7. Static Frontend File Serving (Unified Full-Stack Deployment)
+# ---------------------------------------------------------------------------
+try:
+    from fastapi.staticfiles import StaticFiles
+    # Locate frontend root directory (parent of backend/ or current dir)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if not os.path.exists(os.path.join(base_dir, "index.html")):
+        base_dir = os.path.abspath(".")
+
+    if os.path.exists(os.path.join(base_dir, "index.html")):
+        app.mount("/", StaticFiles(directory=base_dir, html=True), name="frontend")
+        print(f"[INFO] Mounted static frontend directory from: {base_dir}")
+except Exception as e:
+    print(f"[WARN] Could not mount static frontend: {e}")
+
