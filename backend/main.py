@@ -192,11 +192,11 @@ def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> fl
     return round(R * c, 2)
 
 # ---------------------------------------------------------------------------
-# System Status Endpoint
+# System Status & Frontend Root Route
 # ---------------------------------------------------------------------------
 
-@app.get("/")
-def root():
+@app.get("/api/v1/health")
+def health_check():
     return {
         "app": "FixNow MongoDB Backend Service",
         "version": "2.5.0",
@@ -204,6 +204,18 @@ def root():
         "database": "MongoDB (Active Connection)" if db is not None else "In-Memory Resilient Store",
         "databaseName": DB_NAME
     }
+
+@app.get("/")
+def root():
+    from fastapi.responses import FileResponse
+    # Look for index.html in parent or current directory
+    parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    index_path = os.path.join(parent, "index.html")
+    if not os.path.exists(index_path):
+        index_path = os.path.abspath("index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return health_check()
 
 # ---------------------------------------------------------------------------
 # 1. Authentication Endpoints
