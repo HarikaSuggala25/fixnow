@@ -1,0 +1,17 @@
+{
+  "name": "fixnow",
+  "version": "1.0.0",
+  "description": "FixNow - Hyperlocal On-Demand Home & Appliance Services Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'Build successful'"
+  },
+  "keywords": [
+    "hyperlocal",
+    "services",
+    "fixnow"
+  ],
+  "author": "",
+  "license": "ISC"
+}
